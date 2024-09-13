@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Learn Tracker</string>
+    <string name="timer">Time Track</string>
+    <string name="timer_is_running">Timer is running</string>
+    <string name="recent_activities">Recent Activities</string>
+    <string name="calendar">Calendar</string>
+    <string name="track_time">Track Time</string>
+    <string name="every_submission_is_helping">Every Submission is helping!</string>
+    <string name="settings">Settings</string>
+    <string name="tasks">Tasks</string>
+    <string name="subjects">Subjects</string>
+    <string name="schedule">Schedule</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="feedback">Feedback</string>
+    <string name="privacy_title">Privacy</string>
+</resources>
