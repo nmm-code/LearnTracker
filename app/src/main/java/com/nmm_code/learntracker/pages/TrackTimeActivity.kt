@@ -246,24 +246,34 @@ class TrackTimeActivity : ComponentActivity() {
 
         var isRunning by remember { mutableStateOf(running) }
 
-
         val startService: () -> Unit = {
             val intent = Intent(context, TimerService::class.java)
             intent.action = "START_TIMER"
             context.startForegroundService(intent)
             isRunning = true
         }
+
         val stopService: () -> Unit = {
             val intent = Intent(context, TimerService::class.java)
-            context.stopService(intent)  // Stoppt den Service
+            context.stopService(intent)
             isRunning = false
         }
+        fun resetTimer() {
+            with(sharedPreferences.edit()) {
+                putInt("seconds", 0).apply()
+                putBoolean("running", false).apply()
+            }
+            seconds = 0
+            isRunning = false
+        }
+        LaunchedEffect(isRunning) {
+            while (isRunning) {
+                seconds = sharedPreferences.getInt("seconds", seconds)
+                delay(1000L)
+            }
+        }
 
-        Box(
-            modifier = Modifier
-                .padding(50.dp)
-                .size(250.dp),
-        ) {
+        Box(modifier = Modifier.padding(50.dp).size(250.dp),) {
             val color = MaterialTheme.colorScheme.primary
             Canvas(
                 modifier = Modifier
@@ -292,14 +302,7 @@ class TrackTimeActivity : ComponentActivity() {
                 )
             }
         }
-        fun resetTimer() {
-            with(sharedPreferences.edit()) {
-                putInt("seconds", 0).apply()
-                putBoolean("running", false).apply()
-            }
-            seconds = 0
-            isRunning = false
-        }
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
@@ -322,7 +325,11 @@ class TrackTimeActivity : ComponentActivity() {
                 containerColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(20.dp)
             ) {
-                Icon(imageVector = Icons.Default.RestartAlt, contentDescription = null,tint = MaterialTheme.colorScheme.onBackground)
+                Icon(
+                    imageVector = Icons.Default.RestartAlt,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
             }
 
             FloatingActionButton(
@@ -341,7 +348,7 @@ class TrackTimeActivity : ComponentActivity() {
             ) {
                 Icon(
                     imageVector = if (isRunning) Icons.Default.Pause else Icons.Default.PlayArrow,
-                    contentDescription = null,tint = MaterialTheme.colorScheme.onBackground,
+                    contentDescription = null, tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(dp)
                 )
             }
@@ -356,20 +363,14 @@ class TrackTimeActivity : ComponentActivity() {
                 containerColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(20.dp)
             ) {
-                Icon(imageVector = Icons.Default.Save, contentDescription = null,tint = MaterialTheme.colorScheme.onBackground)
+                Icon(
+                    imageVector = Icons.Default.Save,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
             }
         }
-        LaunchedEffect(isRunning) {
-            if (isRunning) {
-                while (true) {
-                    seconds += 1
-                    sharedPreferences.edit().putInt("seconds", seconds).apply()
-                    delay(1000L)
-                }
-            } else {
-                sharedPreferences.edit().putInt("seconds", seconds).apply()
-            }
-        }
+
     }
 
 
