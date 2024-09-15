@@ -11,18 +11,24 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,12 +42,14 @@ import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph1H
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph2
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph2H
 import java.text.DateFormat
-import java.text.SimpleDateFormat
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
+import java.time.temporal.TemporalAdjusters
+import java.time.temporal.WeekFields
 import java.util.Calendar
 
 class ScheduleActivity : ComponentActivity() {
@@ -61,7 +69,7 @@ class ScheduleActivity : ComponentActivity() {
         Scaffold(
             topBar = {
                 TopBar(title = "Schedule")
-            }
+            },
         ) {
             Column(
                 Modifier
@@ -72,9 +80,9 @@ class ScheduleActivity : ComponentActivity() {
                     )
             ) {
                 Header()
-                HorizontalDivider(Modifier.padding(bottom = 20.dp))
+                HorizontalDivider(Modifier.padding(bottom = 10.dp))
                 WeekDays()
-                HorizontalDivider(Modifier.padding(top = 20.dp))
+                HorizontalDivider(Modifier.padding(top = 10.dp))
                 ScheduleField()
             }
         }
@@ -87,8 +95,12 @@ class ScheduleActivity : ComponentActivity() {
         LazyColumn {
             items(list) {
                 val time = LocalTime.of(it, 0)
-                val dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT, java.util.Locale.getDefault())
-                val pattern = if (dateFormat.format(Calendar.getInstance().time).contains("AM") || dateFormat.format(Calendar.getInstance().time).contains("PM")) {
+                val dateFormat =
+                    DateFormat.getTimeInstance(DateFormat.SHORT, java.util.Locale.getDefault())
+                val pattern = if (dateFormat.format(Calendar.getInstance().time)
+                        .contains("AM") || dateFormat.format(Calendar.getInstance().time)
+                        .contains("PM")
+                ) {
                     "hh a"
                 } else {
                     "HH:mm"
@@ -139,22 +151,39 @@ class ScheduleActivity : ComponentActivity() {
         }
     }
 
+    fun getDateOfCurrentWeek(dayOfWeek: DayOfWeek): LocalDate {
+        val today = LocalDate.now()
+        val locale = java.util.Locale.getDefault()
+
+        val firstDayOfWeek = WeekFields.of(locale).firstDayOfWeek
+
+        return today.with(TemporalAdjusters.previousOrSame(firstDayOfWeek))
+            .with(TemporalAdjusters.nextOrSame(dayOfWeek))
+    }
+
     @Composable
     fun WeekDays(modifier: Modifier = Modifier) {
-        val current = LocalDateTime.now()
-        val list = listOf(
-            current,
-            current.plusDays(1),
-            current.plusDays(2),
-            current.plusDays(3),
-            current.plusDays(4),
-            current.plusDays(5),
-            current.plusDays(6)
-        )
-        Row(horizontalArrangement = Arrangement.Start) {
-            list.forEach {
+        val defaultLocale: java.util.Locale = java.util.Locale.getDefault()
+        val firstDayOfWeek: DayOfWeek = WeekFields.of(defaultLocale).firstDayOfWeek
+        val daysOfWeek = DayOfWeek.entries
+        val adjustedDaysOfWeek =
+            daysOfWeek.drop(firstDayOfWeek.ordinal) + daysOfWeek.take(firstDayOfWeek.ordinal)
+
+        var offset by remember {
+            mutableStateOf(LocalDate.now())
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 5.dp)
+        ) {
+            adjustedDaysOfWeek.forEach { item ->
                 WeekDay(
-                    it,
+                    item,
+                    offset,
+                    { it -> offset = it },
                     modifier = Modifier
                         .weight(1f)
                 )
@@ -163,35 +192,53 @@ class ScheduleActivity : ComponentActivity() {
     }
 
     @Composable
-    fun WeekDay(localDateTime: LocalDateTime, modifier: Modifier = Modifier) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+    fun WeekDay(
+        dayOfWeek: DayOfWeek,
+        today: LocalDate,
+        change: (LocalDate) -> Unit,
+        modifier: Modifier = Modifier
+    ) {
+        val date = getDateOfCurrentWeek(dayOfWeek)
+        Surface(
+            onClick = {
+                change(date)
+            },
             modifier = modifier
         ) {
-            Paragraph1(
-                text = localDateTime.dayOfWeek.getDisplayName(
-                    TextStyle.FULL,
-                    java.util.Locale.getDefault()
-                ).substring(0, 3),
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.padding(5.dp))
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.background(MaterialTheme.colorScheme.background)
+            ) {
+                Paragraph1(
+                    text = dayOfWeek.getDisplayName(
+                        TextStyle.FULL,
+                        java.util.Locale.getDefault()
+                    ).substring(0, 3),
+                    fontWeight = if (LocalDate.now().dayOfWeek.value == date.dayOfWeek.value) FontWeight.Bold else FontWeight.W200,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.padding(5.dp))
 
-            Paragraph2H(
-                text = localDateTime.dayOfMonth.toString(),
-                color = if (localDateTime.dayOfMonth == LocalDate.now().dayOfMonth) Color.White else Color.Unspecified,
-                modifier = if (localDateTime.dayOfMonth == LocalDate.now().dayOfMonth) Modifier
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary)
-                    .padding(5.dp)
-                else Modifier
-                    .clip(CircleShape)
-                    .padding(5.dp),
-                textAlign = TextAlign.Center
-            )
+                val isToday = today.dayOfWeek.value == date.dayOfWeek.value
+                Paragraph2H(
+                    text = date.dayOfMonth.toString(),
+                    fontWeight = if (LocalDate.now().dayOfWeek.value == date.dayOfWeek.value) FontWeight.Bold else FontWeight.W200,
+                    color = if (isToday) Color.White else Color.Unspecified,
+                    modifier = if (isToday) Modifier
+                        .size(30.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(5.dp)
+                    else Modifier.
+                        size(30.dp)
+                        .clip(CircleShape)
+                        .padding(5.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
-    
+
 }
