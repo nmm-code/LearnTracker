@@ -1,12 +1,9 @@
 package com.nmm_code.learntracker.data
 
+import android.content.Context
+
 interface Data<T> {
-
-
-    fun read(): List<T>
-    fun save(list: List<T>)
-    fun update(idx: Int, newData: T)
-    fun delete(idx: Int)
-
-    fun count(): Int
+    fun read(context: Context): List<T>
+    fun save(context: Context,list: List<T>)
 }
+

@@ -31,15 +31,12 @@
         <activity android:name=".pre.WorkingTitleActivity" />
 
         <activity android:name=".pages.MainActivity"/>
-        <activity
-            android:name=".pages.TrackTimeActivity"
-            android:noHistory="true" />
+        <activity android:name=".pages.TrackTimeActivity" />
         <activity android:name=".pages.ScheduleActivity" />
         <activity android:name=".pages.CalendarActivity" />
         <activity android:name=".pages.SubjectsActivity" />
         <activity android:name=".pages.DashboardActivity" />
         <activity android:name=".pages.TasksActivity" />
-        <activity android:name=".pages.SettingsActivity" />
         <activity android:name=".pages.TodoPage" />
 
         <service

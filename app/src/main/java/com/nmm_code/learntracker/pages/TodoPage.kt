@@ -48,6 +48,7 @@ class TodoPage : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun Todos(modifier: Modifier = Modifier) {
+        // OFFICE FEATURES
         var title by remember {
             mutableStateOf("")
         }

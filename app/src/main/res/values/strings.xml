@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Learn Tracker</string>
     <string name="timer">Time Track</string>
-    <string name="timer_is_running">Timer is running</string>
+    <string name="timer_is_running">Stopwatch is running</string>
     <string name="recent_activities">Recent Activities</string>
     <string name="calendar">Calendar</string>
     <string name="track_time">Track Time</string>
@@ -13,4 +13,36 @@
     <string name="dashboard">Dashboard</string>
     <string name="feedback">Feedback</string>
     <string name="privacy_title">Privacy</string>
+    <string name="recent_tracked">Recent Tracked</string>
+    <string name="add_name">Add name</string>
+    <string name="add_new_subject">Add new Subject</string>
+    <string name="invalid_name">Invalid Name</string>
+    <string name="the_name_needs_at_least_4_characters">the name needs at least 4 characters</string>
+    <string name="add_new_todolist">Add new TodoList</string>
+    <string name="privacy">Privacy</string>
+    <string name="accept">Accept</string>
+    <string name="information">Information</string>
+    <string name="these_are_just_different_profiles_you_can_set_up">These are just different profiles you can set up.</string>
+    <string name="you_can_switch_between_them_anytime_and_choose_the_one_that_suits_your_needs">You can switch between them anytime and choose the one that suits your needs</string>
+    <string name="select">Select</string>
+    <string name="your_profile">your profile</string>
+    <string name="i_got_it">I got it</string>
+    <string name="university">University</string>
+    <string name="school">School</string>
+    <string name="apprentice_ship">Apprentice ship</string>
+    <string name="work">Work</string>
+    <string name="blue">Blue</string>
+    <string name="red">Red</string>
+    <string name="green">Green</string>
+    <string name="orange">Orange</string>
+    <string name="black">Black</string>
+    <string name="classes">Classes</string>
+    <string name="degrees">Degrees</string>
+    <string name="apprenticeships">Apprenticeships</string>
+    <string name="work_places">Work Places</string>
+    <string name="add_alias">Add alias</string>
+    <string name="delete_entry">Delete Entry</string>
+    <string name="are_you_sure_to_delete">Are you sure to delete (%1$s)?</string>
+    <string name="ok">Ok</string>
+    <string name="you_need_to_create_the_subjects_before_tracking">You need to create the subjects before tracking.</string>
 </resources>

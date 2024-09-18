@@ -1,6 +1,5 @@
 package com.nmm_code.learntracker.pre
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +9,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -18,7 +16,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,7 +23,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,10 +35,7 @@ import androidx.compose.material.icons.filled.ModeEdit
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -51,8 +44,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -64,21 +55,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.dataStore
 import androidx.lifecycle.lifecycleScope
+import com.nmm_code.learntracker.R
+import com.nmm_code.learntracker.composable.AlertName
+import com.nmm_code.learntracker.composable.ColorDropDown
+import com.nmm_code.learntracker.composable.IconRow
+import com.nmm_code.learntracker.composable.IconRowTexField
 import com.nmm_code.learntracker.composable.TopBar
 import com.nmm_code.learntracker.data.DataStoreState
 import com.nmm_code.learntracker.data.Entries
@@ -98,12 +90,12 @@ private val Context.dataStore by dataStore("pre-app.json", EntriesSerializer)
 
 private const val BOX_WIDTH = 150
 
-private val OPTION = listOf(
-    Pair("Blue", Color(57, 96, 187)),
-    Pair("Red", Color(160, 51, 51)),
-    Pair("Green", Color(18, 83, 11)),
-    Pair("Orange", Color(175, 160, 18)),
-    Pair("Black", Color(1, 1, 1))
+val OPTION = listOf(
+    Pair(R.string.blue, Color(57, 96, 187)),
+    Pair(R.string.red, Color(160, 51, 51)),
+    Pair(R.string.green, Color(18, 83, 11)),
+    Pair(R.string.orange, Color(175, 160, 18)),
+    Pair(R.string.black, Color(1, 1, 1))
 )
 
 class WorkingTitleActivity : ComponentActivity() {
@@ -153,25 +145,25 @@ class WorkingTitleActivity : ComponentActivity() {
     @Composable
     private fun getTitleByPage(): String {
         val string = DataStoreState(this, DataStoreState.PATH).getAsState(default = "/").value
-        return when {
-            string == "/school" -> {
+        return when (string) {
+            "/school" -> {
                 type = WorkingTitleType.SCHOOL
-                "Classes"
+                stringResource(R.string.classes)
             }
 
-            string == "/uni" -> {
+            "/uni" -> {
                 type = WorkingTitleType.UNI
-                "Degrees"
+                stringResource(R.string.degrees)
             }
 
-            string == "/ap" -> {
+            "/ap" -> {
                 type = WorkingTitleType.AP
-                "Apprenticeships"
+                stringResource(R.string.apprenticeships)
             }
 
-            string == "/work" -> {
+            "/work" -> {
                 type = WorkingTitleType.WORK
-                "Work Places"
+                stringResource(R.string.work_places)
             }
 
             else -> ""
@@ -266,20 +258,6 @@ class WorkingTitleActivity : ComponentActivity() {
     }
 
 
-    @Composable
-    private fun AlertName(alert: Boolean, change: () -> Unit) {
-        if (alert)
-            AlertDialog(onDismissRequest = change, title = {
-                Headline2(text = "Invalid Name")
-            }, confirmButton = {}, text = {
-                Paragraph1(
-                    text = "The name must contain at least 4 characters.",
-                    softWrap = true
-                )
-            })
-    }
-
-
     /**
      *  @param index is variable which has 2 meaning
      *      isModal == -1 -> modal is closed
@@ -300,7 +278,11 @@ class WorkingTitleActivity : ComponentActivity() {
             mutableStateOf("")
         }
 
-        AlertName(alert) { alert = false }
+        AlertName(
+            alert,
+            stringResource(id = R.string.invalid_name),
+            stringResource(id = R.string.the_name_needs_at_least_4_characters)
+        ) { alert = false }
 
         val list = getList()
         val isModalOpen = index != -1
@@ -415,13 +397,13 @@ class WorkingTitleActivity : ComponentActivity() {
                 IconRowTexField(
                     icon = Icons.Default.ModeEdit,
                     value = name,
-                    placeholderText = "Add name",
+                    placeholderText = stringResource(id = R.string.add_name),
                     modifier = Modifier.focusRequester(focusRequester)
                 ) { name = it }
                 IconRowTexField(
                     icon = Icons.AutoMirrored.Filled.ShortText,
                     value = alias,
-                    placeholderText = "Add alias",
+                    placeholderText = stringResource(R.string.add_alias),
 
                     ) {
                     alias = it
@@ -429,7 +411,11 @@ class WorkingTitleActivity : ComponentActivity() {
                 IconRow(
                     icon = Icons.Default.ColorLens
                 ) {
-                    DropDown(it, selectedColor) { color -> selectedColor = color }
+                    ColorDropDown(
+                        it,
+                        this@WorkingTitleActivity,
+                        selectedColor
+                    ) { color -> selectedColor = color }
                 }
             }
     }
@@ -438,148 +424,20 @@ class WorkingTitleActivity : ComponentActivity() {
     fun ConfirmAlert(name: String, confirm: Boolean, onConfirm: () -> Unit, onClose: () -> Unit) {
         if (confirm)
             AlertDialog(onDismissRequest = onClose, title = {
-                Headline2(text = "Delete Entry")
+                Headline2(text = stringResource(R.string.delete_entry))
             }, confirmButton = {
                 Button(onClick = {
                     onClose()
                     onConfirm()
                 }) {
-                    Text(text = "Ok", color = Color.White)
+                    Text(text = stringResource(R.string.ok), color = Color.White)
                 }
             }, text = {
                 Paragraph1(
-                    text = "Are you sure to delete (${name.trim()})?",
+                    text = stringResource(R.string.are_you_sure_to_delete, name.trim()),
                     softWrap = true
                 )
             })
-    }
-
-
-    @Composable
-    @OptIn(ExperimentalMaterial3Api::class)
-    private fun DropDown(
-        modifier: Modifier,
-        selectedColor: Pair<String, Color>,
-        onSelected: (it: Pair<String, Color>) -> Unit
-    ) {
-        var expanded by remember { mutableStateOf(false) }
-
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = {
-                expanded = !expanded
-            },
-            modifier = modifier
-        ) {
-            TextField(
-                readOnly = true,
-                value = selectedColor.first,
-                onValueChange = { },
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(
-                        expanded = expanded
-                    )
-                },
-                textStyle = TextStyle.Default.copy(
-                    fontWeight = FontWeight.W400,
-                    fontSize = 18.sp,
-                    letterSpacing = 0.5.sp,
-                ),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .menuAnchor()
-            )
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = {
-                    expanded = false
-                }
-            ) {
-                OPTION.forEach { item ->
-                    DropdownMenuItem(
-                        text = {
-                            Row(horizontalArrangement = Arrangement.SpaceBetween) {
-                                Canvas(
-                                    Modifier
-                                        .padding(end = 10.dp)
-                                        .size(20.dp)
-
-                                ) {
-                                    drawRoundRect(
-                                        item.second,
-                                        cornerRadius = CornerRadius(4f, 4f)
-                                    )
-                                }
-                                Paragraph1(
-                                    text = item.first
-                                )
-                            }
-                        },
-                        onClick = {
-                            onSelected(item)
-                            expanded = false
-                        }
-                    )
-                }
-            }
-        }
-    }
-
-    @SuppressLint("UnnecessaryComposedModifier")
-    @Composable
-    fun IconRowTexField(
-        modifier: Modifier = Modifier,
-        icon: ImageVector,
-        value: TextFieldValue,
-        placeholderText: String,
-        changeValue: (it: TextFieldValue) -> Unit
-    ) {
-        IconRow(icon) {
-            TextField(
-                value = value,
-                onValueChange = changeValue,
-                textStyle = TextStyle.Default.copy(
-                    fontWeight = FontWeight.W400,
-                    fontSize = 18.sp,
-                    letterSpacing = 0.5.sp,
-                ),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent
-                ),
-                placeholder = {
-                    Paragraph1(
-                        text = placeholderText
-                    )
-                },
-                modifier = it.composed { modifier }
-            )
-        }
-    }
-
-
-    @Composable
-    fun IconRow(
-        icon: ImageVector,
-        content: @Composable (Modifier) -> Unit
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                Modifier.weight(3f)
-            )
-            content(Modifier.weight(8f))
-            Spacer(modifier = Modifier.weight(1f))
-        }
     }
 
     @OptIn(ExperimentalFoundationApi::class)

@@ -27,8 +27,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.nmm_code.learntracker.R
 import com.nmm_code.learntracker.composable.TopBar
 import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
 import com.nmm_code.learntracker.ui.theme.getAccessibleTextColor
@@ -58,7 +60,7 @@ class TasksActivity : ComponentActivity() {
         )
         Scaffold(
             topBar = {
-                TopBar(title = "Tasks")
+                TopBar(title = stringResource(id = R.string.tasks))
             },
             floatingActionButton = {
                 ExtendedFloatingActionButton(onClick = { /*TODO ADD ACTIVITY*/ },Modifier.padding(bottom = 50.dp)) {
@@ -67,7 +69,7 @@ class TasksActivity : ComponentActivity() {
                         contentDescription = null,
                         modifier = Modifier.padding(end = 15.dp)
                     )
-                    Text(text = "Add new TodoList")
+                    Text(text = stringResource(R.string.add_new_todolist))
                 }
             }
         ) {
@@ -85,7 +87,7 @@ class TasksActivity : ComponentActivity() {
                             startActivity(Intent(this@TasksActivity,TodoPage::class.java))
                         },
                         modifier = Modifier
-                            .border(1.dp,Color.LightGray,RoundedCornerShape(16.dp))
+                            .border(1.dp, Color.LightGray, RoundedCornerShape(16.dp))
                             .clip(RoundedCornerShape(16.dp))
                             .aspectRatio(2f)
                     ) {

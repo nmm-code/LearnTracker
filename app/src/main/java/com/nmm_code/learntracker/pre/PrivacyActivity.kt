@@ -15,8 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.nmm_code.learntracker.R
 import com.nmm_code.learntracker.composable.TopBar
 import com.nmm_code.learntracker.data.DataStoreState
 import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
@@ -82,7 +84,7 @@ class PrivacyActivity : ComponentActivity() {
         }
         Scaffold(
             topBar = {
-                TopBar(title = "Privacy", icon = false)
+                TopBar(title = stringResource(R.string.privacy), icon = false)
             },
             content = { paddingValues ->
                 LazyColumn(
@@ -109,7 +111,7 @@ class PrivacyActivity : ComponentActivity() {
                                 )
                                 finish()
                             },
-                            text = "Accept",
+                            text = stringResource(R.string.accept),
                             modifier = Modifier.padding(bottom = MaterialTheme.space.padding7)
                         )
                     }

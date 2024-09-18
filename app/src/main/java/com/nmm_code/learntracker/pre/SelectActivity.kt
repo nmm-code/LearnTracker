@@ -38,11 +38,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
+import com.nmm_code.learntracker.R
 import com.nmm_code.learntracker.data.DataStoreState
 import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline1
@@ -99,21 +101,21 @@ class SelectActivity : ComponentActivity() {
         if (enabled)
             AlertDialog(
                 onDismissRequest = { onClose() },
-                confirmButton = { ButtonOutline(text = "I got it", onClick = { onClose() }) },
+                confirmButton = { ButtonOutline(text = stringResource(R.string.i_got_it), onClick = { onClose() }) },
                 title = {
-                    Headline2(text = "Information")
+                    Headline2(text = stringResource(R.string.information))
                 },
                 text = {
                     Column {
                         Paragraph1(
                             fontWeight = FontWeight.W400,
-                            text = "These are just different profiles you can set up.",
+                            text = stringResource(R.string.these_are_just_different_profiles_you_can_set_up),
                             softWrap = true
                         )
                         Spacer(modifier = modifier.padding(10.dp))
                         Paragraph1(
                             fontWeight = FontWeight.W400,
-                            text = "You can switch between them anytime and choose the one that suits your needs",
+                            text = stringResource(R.string.you_can_switch_between_them_anytime_and_choose_the_one_that_suits_your_needs),
                             softWrap = true,
                         )
                     }
@@ -132,20 +134,20 @@ class SelectActivity : ComponentActivity() {
     fun SelectActivityPage(modifier: Modifier = Modifier) {
         val list = listOf(
             SelectBox(
-                "School",
+                stringResource(R.string.school),
                 "/school",
                 Icons.Default.Apartment
             ),
             SelectBox(
-                "University",
+                stringResource(R.string.university),
                 "/uni",
                 Icons.Default.School
             ), SelectBox(
-                "Apprentice ship",
+                stringResource(R.string.apprentice_ship),
                 "/ap",
                 Icons.Default.HomeWork
             ), SelectBox(
-                "Work",
+                stringResource(R.string.work),
                 "/work",
                 Icons.Default.Work
             )
@@ -155,13 +157,13 @@ class SelectActivity : ComponentActivity() {
             Box(Modifier.fillMaxSize()) {
                 Column(Modifier.align(Alignment.Center)) {
                     Headline1(
-                        text = "Select",
+                        text = stringResource(R.string.select),
                         size = 35.sp,
                         fontWeight = FontWeight.W900,
                         modifier = Modifier.padding(start = 32.dp, bottom = 4.dp)
                     )
                     Headline2(
-                        text = "your profile",
+                        text = stringResource(R.string.your_profile),
                         color = Color.LightGray,
                         size = 25.sp,
                         modifier = Modifier.padding(start = 32.dp, bottom = 32.dp)
