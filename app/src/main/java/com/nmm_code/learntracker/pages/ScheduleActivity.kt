@@ -6,15 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -92,31 +93,38 @@ class ScheduleActivity : ComponentActivity() {
     fun ScheduleField(modifier: Modifier = Modifier) {
         val list = (0..23).toMutableList()
         list.add(0)
-        LazyColumn {
-            items(list) {
-                val time = LocalTime.of(it, 0)
-                val dateFormat =
-                    DateFormat.getTimeInstance(DateFormat.SHORT, java.util.Locale.getDefault())
-                val pattern = if (dateFormat.format(Calendar.getInstance().time)
-                        .contains("AM") || dateFormat.format(Calendar.getInstance().time)
-                        .contains("PM")
-                ) {
-                    "hh a"
-                } else {
-                    "HH:mm"
-                }
-                val formatter = DateTimeFormatter.ofPattern(pattern, java.util.Locale.getDefault())
+        Box(Modifier.verticalScroll(rememberScrollState())) {
+            Column {
+                list.forEach {
+                    val time = LocalTime.of(it, 0)
+                    val dateFormat =
+                        DateFormat.getTimeInstance(DateFormat.SHORT, java.util.Locale.getDefault())
+                    val pattern = if (dateFormat.format(Calendar.getInstance().time)
+                            .contains("AM") || dateFormat.format(Calendar.getInstance().time)
+                            .contains("PM")
+                    ) {
+                        "hh a"
+                    } else {
+                        "HH:mm"
+                    }
+                    val formatter =
+                        DateTimeFormatter.ofPattern(pattern, java.util.Locale.getDefault())
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(vertical = 20.dp)
-                ) {
-                    Paragraph2(
-                        text = time.format(formatter).lowercase(),
-                        modifier = Modifier.weight(2f),
-                    )
-                    HorizontalDivider(modifier = Modifier.weight(8f))
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        modifier = Modifier.padding(vertical = 20.dp)
+                    ) {
+                        Paragraph2(
+                            text = time.format(formatter).lowercase(),
+                            modifier = Modifier.weight(2f),
+                        )
+                        HorizontalDivider(modifier = Modifier.weight(8f))
+                    }
                 }
+            }
+            Row(Modifier.padding(top = 20.dp)) {
+                Spacer(modifier = Modifier.weight(2f))
+                // TODO COMPONENT
             }
         }
     }
@@ -151,7 +159,7 @@ class ScheduleActivity : ComponentActivity() {
         }
     }
 
-    fun getDateOfCurrentWeek(dayOfWeek: DayOfWeek): LocalDate {
+    private fun getDateOfCurrentWeek(dayOfWeek: DayOfWeek): LocalDate {
         val today = LocalDate.now()
         val locale = java.util.Locale.getDefault()
 
@@ -227,12 +235,12 @@ class ScheduleActivity : ComponentActivity() {
                     fontWeight = if (LocalDate.now().dayOfWeek.value == date.dayOfWeek.value) FontWeight.Bold else FontWeight.W200,
                     color = if (isToday) Color.White else Color.Unspecified,
                     modifier = if (isToday) Modifier
-                        .size(30.dp)
+                        .size(34.dp)
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.primary)
                         .padding(5.dp)
-                    else Modifier.
-                        size(30.dp)
+                    else Modifier
+                        .size(34.dp)
                         .clip(CircleShape)
                         .padding(5.dp),
                     textAlign = TextAlign.Center
@@ -240,5 +248,4 @@ class ScheduleActivity : ComponentActivity() {
             }
         }
     }
-
 }

@@ -26,12 +26,10 @@ class DashboardActivity : ComponentActivity() {
         setContent {
             LearnTrackerTheme {
                 DashboardPage()
-
             }
         }
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Preview(showBackground = true)
     @Composable
     fun DashboardPage(modifier: Modifier = Modifier) {
