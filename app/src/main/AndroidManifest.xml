@@ -40,7 +40,7 @@
         <activity android:name=".pages.DashboardActivity" />
         <activity android:name=".pages.TasksActivity" />
         <activity android:name=".pages.SettingsActivity" />
-        <activity android:name=".pages.ProfileActivity" />
+        <activity android:name=".pages.TodoPage" />
 
         <service
             android:name=".service.TimerService"
