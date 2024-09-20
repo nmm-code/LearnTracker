@@ -42,7 +42,7 @@ class TimerService : Service() {
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            return START_NOT_STICKY
+            throw Error()
         }
 
         isRunning = true

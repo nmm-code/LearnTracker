@@ -46,4 +46,6 @@
     <string name="are_you_sure_to_delete">Sind sie sicher dass sie (%1$s) löschen wollen?</string>
     <string name="ok">Ok</string>
     <string name="you_need_to_create_the_subjects_before_tracking">Erstellen sie zunächst ein Fach um das zu tracken.</string>
+    <string name="time_track_need_permission_for_notification">Time Track braucht Berechtigung für Benachichtigung !</string>
+    <string name="set_permission">Berechtigung einstellen</string>
 </resources>

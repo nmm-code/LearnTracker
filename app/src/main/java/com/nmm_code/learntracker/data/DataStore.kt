@@ -23,6 +23,7 @@ class DataStoreState<T>(private val context: Context, private val key: Preferenc
         val PAGE = intPreferencesKey("page")
         val SELECT_INFO = booleanPreferencesKey("select_info")
         val PATH = stringPreferencesKey("path")
+        val TODO_ID = intPreferencesKey("todo_id")
     }
 
     suspend fun get(default: T): T {

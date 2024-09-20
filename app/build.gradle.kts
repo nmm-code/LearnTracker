@@ -81,4 +81,6 @@ dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.serialization.cbor)
+    implementation(libs.accompanist.permissions)
 }

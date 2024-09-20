@@ -39,6 +39,7 @@ import androidx.lifecycle.lifecycleScope
 import com.nmm_code.learntracker.R
 import com.nmm_code.learntracker.composable.TopBar
 import com.nmm_code.learntracker.data.DataStoreState
+import com.nmm_code.learntracker.data.Subject
 import com.nmm_code.learntracker.data.SubjectsData
 import com.nmm_code.learntracker.data.TimerActivityData
 import com.nmm_code.learntracker.pre.WorkingTitleActivity
@@ -232,7 +233,7 @@ class MainActivity : ComponentActivity() {
                     when (elem.id) {
                         R.drawable.ic_timer -> {
                             val list =
-                                SubjectsData().read(this)
+                                SubjectsData.read<Subject>(this)
 
                             if (list.isNotEmpty())
                                 startActivity(Intent(this@MainActivity, elem.activity))

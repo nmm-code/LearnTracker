@@ -45,4 +45,6 @@
     <string name="are_you_sure_to_delete">Are you sure to delete (%1$s)?</string>
     <string name="ok">Ok</string>
     <string name="you_need_to_create_the_subjects_before_tracking">You need to create the subjects before tracking.</string>
+    <string name="time_track_need_permission_for_notification">Time Track need Permission for Notification !</string>
+    <string name="set_permission">set permission</string>
 </resources>

@@ -16,6 +16,7 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
+import java.time.LocalDate
 
 
 enum class WorkingTitleType {
@@ -42,57 +43,6 @@ data class WorkingTitle(
     }
 }
 
-@Serializable
-data class Entries(
-    @Serializable(with = PersistListSerializer::class)
-    var list: PersistentList<WorkingTitle> = persistentListOf()
-)
-
-@OptIn(ExperimentalSerializationApi::class)
-class PersistListSerializer(
-    private val serializer: KSerializer<WorkingTitle>,
-) : KSerializer<PersistentList<WorkingTitle>> {
-
-    private class PersistentListDescriptor :
-        SerialDescriptor by serialDescriptor<List<WorkingTitle>>() {
-        @ExperimentalSerializationApi
-        override val serialName: String = "kotlinx.serialization.immutable.persistentList"
-    }
-
-    override val descriptor: SerialDescriptor = PersistentListDescriptor()
-
-    override fun serialize(encoder: Encoder, value: PersistentList<WorkingTitle>) {
-        return ListSerializer(serializer).serialize(encoder, value)
-    }
-
-    override fun deserialize(decoder: Decoder): PersistentList<WorkingTitle> {
-        return ListSerializer(serializer).deserialize(decoder).toPersistentList()
-    }
-}
-
-
-object EntriesSerializer : Serializer<Entries> {
-    override val defaultValue: Entries
-        get() = Entries()
-
-    override suspend fun readFrom(input: InputStream): Entries {
-        return try {
-            Json.decodeFromString(
-                deserializer = Entries.serializer(),
-                string = input.readBytes().decodeToString()
-            )
-        } catch (e: SerializationException) {
-            e.printStackTrace()
-            defaultValue
-        }
-    }
-
-    override suspend fun writeTo(t: Entries, output: OutputStream) =
-        output.write(
-            Json.encodeToString(
-                serializer = Entries.serializer(),
-                value = t
-            ).encodeToByteArray()
-        )
-
+object WorkingTitleData : Data<WorkingTitle>(false) {
+    override val fileName: String = "/working-tiles.bin"
 }

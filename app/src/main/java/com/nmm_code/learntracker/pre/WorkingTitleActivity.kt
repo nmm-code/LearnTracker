@@ -1,6 +1,5 @@
 package com.nmm_code.learntracker.pre
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -47,12 +46,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,7 +64,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.dataStore
 import androidx.lifecycle.lifecycleScope
 import com.nmm_code.learntracker.R
 import com.nmm_code.learntracker.composable.AlertName
@@ -73,9 +72,8 @@ import com.nmm_code.learntracker.composable.IconRow
 import com.nmm_code.learntracker.composable.IconRowTexField
 import com.nmm_code.learntracker.composable.TopBar
 import com.nmm_code.learntracker.data.DataStoreState
-import com.nmm_code.learntracker.data.Entries
-import com.nmm_code.learntracker.data.EntriesSerializer
 import com.nmm_code.learntracker.data.WorkingTitle
+import com.nmm_code.learntracker.data.WorkingTitleData
 import com.nmm_code.learntracker.data.WorkingTitleType
 import com.nmm_code.learntracker.pages.MainActivity
 import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
@@ -83,10 +81,10 @@ import com.nmm_code.learntracker.ui.theme.space
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline1
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline2
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph1
-import kotlinx.collections.immutable.mutate
 import kotlinx.coroutines.launch
-
-private val Context.dataStore by dataStore("pre-app.json", EntriesSerializer)
+import kotlinx.coroutines.runBlocking
+import java.io.File
+import kotlin.io.path.ExperimentalPathApi
 
 private const val BOX_WIDTH = 150
 
@@ -101,31 +99,11 @@ val OPTION = listOf(
 class WorkingTitleActivity : ComponentActivity() {
 
     private var type: WorkingTitleType? = null
+    var data: WorkingTitleData = WorkingTitleData
 
     private suspend fun getPath() =
         DataStoreState(this@WorkingTitleActivity, DataStoreState.PATH).get("")
 
-    private suspend fun addList(w: WorkingTitle) =
-        dataStore.updateData {
-            Entries(
-                it.list.mutate { list -> list.add(w) }
-            )
-        }
-
-    private suspend fun editList(idx: Int, w: WorkingTitle) =
-        dataStore.updateData {
-            Entries(
-                it.list.mutate { list -> list[idx] = w }
-            )
-        }
-
-
-    private suspend fun removeAt(idx: Int) =
-        dataStore.updateData {
-            Entries(
-                it.list.mutate { list -> list.removeAt(idx) }
-            )
-        }
 
     private fun navigatePageBack() =
         lifecycleScope.launch {
@@ -140,7 +118,6 @@ class WorkingTitleActivity : ComponentActivity() {
                 DataStoreState.PATH
             ).set(mergedPath)
         }
-
 
     @Composable
     private fun getTitleByPage(): String {
@@ -170,14 +147,11 @@ class WorkingTitleActivity : ComponentActivity() {
         }
     }
 
-    @Composable
-    private fun getList() =
-        dataStore.data.collectAsState(initial = Entries()).value.list
+    private fun getList() = data.read<WorkingTitle>(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
 
         lifecycleScope.launch {
             DataStoreState(this@WorkingTitleActivity, DataStoreState.PAGE).set(2)
@@ -217,7 +191,7 @@ class WorkingTitleActivity : ComponentActivity() {
     @Composable
     fun WorkingTitlePage() {
         val title = getTitleByPage()
-        val list = getList()
+        val list = getList().toMutableStateList()
         var isModalOpen by remember { mutableIntStateOf(-1) }
 
         var animate by remember {
@@ -233,7 +207,7 @@ class WorkingTitleActivity : ComponentActivity() {
                 }
             },
             bottomBar = {
-                AddModalSheet(isModalOpen) { isModalOpen = -1 }
+                AddModalSheet(isModalOpen, list) { isModalOpen = -1 }
             }
         ) {
 
@@ -265,8 +239,12 @@ class WorkingTitleActivity : ComponentActivity() {
      *      else -> Modal is idx of list and on long click edit Modal
      */
     @Composable
-    @OptIn(ExperimentalMaterial3Api::class)
-    private fun AddModalSheet(index: Int, onClose: () -> Unit) {
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalPathApi::class)
+    private fun AddModalSheet(
+        index: Int,
+        list: SnapshotStateList<WorkingTitle>,
+        onClose: () -> Unit
+    ) {
         // ALERT INFO
         var alert by remember {
             mutableStateOf(false)
@@ -284,16 +262,31 @@ class WorkingTitleActivity : ComponentActivity() {
             stringResource(id = R.string.the_name_needs_at_least_4_characters)
         ) { alert = false }
 
-        val list = getList()
         val isModalOpen = index != -1
         val focusRequester = remember { FocusRequester() }
 
         ConfirmAlert(confirmTitle, confirm, {
             onClose()
             confirmTitle = ""
-            lifecycleScope.launch {
-                removeAt(index)
+            val path = list[index].path
+            runBlocking {
+                try {
+                    val file = File(
+                        application.filesDir.path + DataStoreState(
+                            this@WorkingTitleActivity,
+                            DataStoreState.PATH
+                        ).get("") + path
+                    )
+                    file.deleteRecursively()
+                    println("Delete Result")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    println("File Deletion Error" + e.message.toString())
+                }
             }
+
+            list.removeAt(index)
+            data.save(this@WorkingTitleActivity, list)
         }) { confirm = false }
 
 
@@ -347,8 +340,8 @@ class WorkingTitleActivity : ComponentActivity() {
                                 return@IconButton
                             }
                             lifecycleScope.launch {
-                                if (isAdding) { // adding or edit
-                                    addList(
+                                if (isAdding) {
+                                    list.add(
                                         WorkingTitle(
                                             name.text,
                                             alias.text,
@@ -357,15 +350,15 @@ class WorkingTitleActivity : ComponentActivity() {
                                         )
                                     )
                                 } else {
-                                    editList(
-                                        index, WorkingTitle(
+                                    list[index] =
+                                        WorkingTitle(
                                             name.text,
                                             alias.text,
                                             selectedColor.second.toArgb(),
                                             type = type ?: WorkingTitleType.WORK
                                         )
-                                    )
                                 }
+                                data.save(this@WorkingTitleActivity, list)
                                 onClose()
                             }
                         },

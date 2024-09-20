@@ -63,6 +63,7 @@ import com.nmm_code.learntracker.composable.IconRowTexField
 import com.nmm_code.learntracker.composable.TopBar
 import com.nmm_code.learntracker.data.Subject
 import com.nmm_code.learntracker.data.SubjectsData
+import com.nmm_code.learntracker.data.TimerActivity
 import com.nmm_code.learntracker.data.TimerActivityData
 import com.nmm_code.learntracker.pre.OPTION
 import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
@@ -71,7 +72,7 @@ import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline1
 import kotlinx.coroutines.launch
 
 class SubjectsActivity : ComponentActivity() {
-    private val data = SubjectsData()
+    private val data = SubjectsData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +89,7 @@ class SubjectsActivity : ComponentActivity() {
     @Composable
     fun SubjectsPage(modifier: Modifier = Modifier) {
         val list = remember {
-            data.read(this).toMutableStateList()
+            data.read<Subject>(this).toMutableStateList()
         }
         var isModalOpen by remember { mutableIntStateOf(-1) }
 
@@ -200,7 +201,7 @@ class SubjectsActivity : ComponentActivity() {
 
                 val dataTimer = TimerActivityData()
                 var idx = 0
-                val subjects = dataTimer.read(this@SubjectsActivity).filter { it.id != index }.map {
+                val subjects = dataTimer.read<TimerActivity>(this@SubjectsActivity).filter { it.id != index }.map {
                     it.id = idx
                     idx++
                     it

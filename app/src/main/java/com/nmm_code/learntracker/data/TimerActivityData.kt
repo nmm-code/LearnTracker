@@ -1,11 +1,6 @@
 package com.nmm_code.learntracker.data
 
-import android.content.Context
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import java.io.File
 import java.time.LocalDate
 
 @Serializable
@@ -16,21 +11,7 @@ data class TimerActivity(
     val year: Int
 )
 
-class TimerActivityData : Data<TimerActivity> {
-    override fun read(context: Context): List<TimerActivity> {
-        var dir = ""
-        runBlocking {
-            dir = DataStoreState(context, DataStoreState.PATH).get("")
-        }
-
-        val file = File(context.filesDir.path + dir + "/timer.json")
-        if (!file.exists()) {
-            return emptyList()
-        }
-
-        val fileContent = file.readText()
-        return Json.decodeFromString<List<TimerActivity>>(fileContent)
-    }
+class TimerActivityData : Data<TimerActivity>() {
 
     companion object {
         fun mergeLast2Weeks(list: List<TimerActivity>): List<TimerActivity> {
@@ -49,16 +30,6 @@ class TimerActivityData : Data<TimerActivity> {
         }
     }
 
-    override fun save(context: Context, list: List<TimerActivity>) {
-        var dir = ""
-        runBlocking {
-            dir = DataStoreState(context, DataStoreState.PATH).get("")
-        }
-
-        val file = File(context.filesDir.path + dir + "/timer.json")
-        file.printWriter().use { out ->
-            out.println(Json.encodeToString(list))
-        }
-    }
+    override val fileName: String = "/timer.bin"
 
 }
