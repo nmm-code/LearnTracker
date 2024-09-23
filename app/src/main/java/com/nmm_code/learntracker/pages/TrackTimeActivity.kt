@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -50,6 +51,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
@@ -188,7 +190,6 @@ class TrackTimeActivity : ComponentActivity() {
 
     @Composable
     fun ClockPage() {
-        val local = LocalDate.now()
         val list =
             TimerActivityData.mergeLast2Weeks(TimerActivityData().read(this))
                 .toMutableStateList()
@@ -206,6 +207,39 @@ class TrackTimeActivity : ComponentActivity() {
             SubjectDropDown(activeIndex)
             Clock(list, activeIndex)
             RecentActivity(list = list)
+        }
+    }
+
+
+    fun saveCurrentTime(context: Context) {
+        val sharedPreferences = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val currentTime = SystemClock.elapsedRealtime()
+        editor.putLong("saved_time", currentTime)
+        editor.apply()
+    }
+
+    fun getElapsedTimeInHumanReadableForm(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val savedTime = sharedPreferences.getLong("saved_time", -1L)
+        val currentTime = SystemClock.elapsedRealtime()
+
+        val elapsedTime = if (savedTime != -1L) {
+            currentTime - savedTime
+        } else {
+            return "Keine Zeit gespeichert"
+        }
+
+        val seconds = (elapsedTime / 1000) % 60
+        val minutes = (elapsedTime / (1000 * 60)) % 60
+        val hours = (elapsedTime / (1000 * 60 * 60)) % 24
+        val days = elapsedTime / (1000 * 60 * 60 * 24)
+
+        return when {
+            days > 0 -> "$days $hours:$minutes:$seconds"
+            hours > 0 -> "$hours:$minutes:$seconds"
+            minutes > 0 -> "$minutes:$seconds"
+            else -> "$seconds"
         }
     }
 
@@ -274,36 +308,14 @@ class TrackTimeActivity : ComponentActivity() {
     fun Clock(list: SnapshotStateList<TimerActivity>, activeIndex: MutableIntState) {
         val sharedPreferences = getSharedPreferences("TimerPrefs", Context.MODE_PRIVATE)
         val running = sharedPreferences.getBoolean("running", false)
-        val s = sharedPreferences.getInt("seconds", 0)
 
-        var seconds by remember { mutableIntStateOf(s) }
+        var time by remember { mutableStateOf("") }
 
         var isRunning by remember { mutableStateOf(running) }
 
-        val startService: () -> Unit = {
-            val intent = Intent(this, TimerService::class.java)
-            intent.action = "START_TIMER"
-            startForegroundService(intent)
-            isRunning = true
-        }
-
-        val stopService: () -> Unit = {
-            val intent = Intent(this, TimerService::class.java)
-            stopService(intent)
-            isRunning = false
-        }
-
-        fun resetTimer() {
-            with(sharedPreferences.edit()) {
-                putInt("seconds", 0).apply()
-                putBoolean("running", false).apply()
-            }
-            seconds = 0
-            isRunning = false
-        }
         LaunchedEffect(isRunning) {
             while (isRunning) {
-                seconds = sharedPreferences.getInt("seconds", seconds)
+                time = getElapsedTimeInHumanReadableForm(this@TrackTimeActivity)
                 delay(1000L)
             }
         }
@@ -326,19 +338,7 @@ class TrackTimeActivity : ComponentActivity() {
                     .align(Alignment.Center)
                     .height(85.dp)
             ) {
-
-                Headline1(
-                    text = "%02d".format(seconds / 60),
-                    size = 45.sp,
-                    textAlign = TextAlign.Right,
-                    modifier = Modifier.align(Alignment.TopEnd)
-                )
-                Headline1(
-                    text = "%02d".format(seconds % 60),
-                    size = 35.sp,
-                    textAlign = TextAlign.Right,
-                    modifier = Modifier.align(Alignment.BottomEnd)
-                )
+                Text(text = time,color=  MaterialTheme.colorScheme.onBackground)
             }
         }
 
@@ -357,8 +357,6 @@ class TrackTimeActivity : ComponentActivity() {
             FloatingActionButton(
                 onClick = {
                     isRunning = false
-                    stopService()
-                    resetTimer()
                 },
 
                 shape = CircleShape,
@@ -375,11 +373,6 @@ class TrackTimeActivity : ComponentActivity() {
             FloatingActionButton(
                 onClick = {
                     isRunning = !isRunning
-                    if (isRunning) {
-                        startService()
-                    } else {
-                        stopService()
-                    }
                 },
                 shape = CircleShape,
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -398,7 +391,7 @@ class TrackTimeActivity : ComponentActivity() {
                     list.add(
                         TimerActivity(
                             activeIndex.intValue,
-                            seconds.toLong(),
+                            0,
                             date.dayOfYear,
                             date.year
                         )
@@ -410,8 +403,6 @@ class TrackTimeActivity : ComponentActivity() {
                     list.addAll(mergeList)
 
                     isRunning = false
-                    stopService()
-                    resetTimer()
                 },
                 shape = CircleShape,
                 containerColor = MaterialTheme.colorScheme.primary,
