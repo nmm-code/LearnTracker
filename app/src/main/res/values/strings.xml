@@ -13,7 +13,7 @@
     <string name="dashboard">Dashboard</string>
     <string name="feedback">Feedback</string>
     <string name="privacy_title">Privacy</string>
-    <string name="recent_tracked">Recent Tracked</string>
+    <string name="recent_tracked">recent: </string>
     <string name="add_name">Add name</string>
     <string name="add_new_subject">Add new Subject</string>
     <string name="invalid_name">Invalid Name</string>
@@ -47,4 +47,11 @@
     <string name="you_need_to_create_the_subjects_before_tracking">You need to create the subjects before tracking.</string>
     <string name="time_track_need_permission_for_notification">Time Track need Permission for Notification !</string>
     <string name="set_permission">set permission</string>
+    <string name="magenta">Magenta</string>
+    <string name="pink">Pink</string>
+    <string name="cyan">Cyan</string>
+    <string name="yellow">Yellow</string>
+    <string name="last_week">Last Week</string>
+    <string name="last_month">Last Month</string>
+    <string name="last_year">Last Year</string>
 </resources>

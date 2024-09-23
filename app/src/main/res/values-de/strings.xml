@@ -14,7 +14,7 @@
     <string name="dashboard">Dashboard</string>
     <string name="feedback">Feedback</string>
     <string name="privacy_title">Datenschutz</string>
-    <string name="recent_tracked">Zuletzt verfolgt</string>
+    <string name="recent_tracked">zuletzt:</string>
     <string name="add_name">Namen hinzufügen</string>
     <string name="add_new_subject">Neues Fach hinzufügen</string>
     <string name="invalid_name">Ungültiger Name</string>
@@ -48,4 +48,11 @@
     <string name="you_need_to_create_the_subjects_before_tracking">Erstellen sie zunächst ein Fach um das zu tracken.</string>
     <string name="time_track_need_permission_for_notification">Time Track braucht Berechtigung für Benachichtigung !</string>
     <string name="set_permission">Berechtigung einstellen</string>
+    <string name="pink">Pink</string>
+    <string name="cyan">Cyan</string>
+    <string name="magenta">Lila</string>
+    <string name="yellow">Gelb</string>
+    <string name="last_week">Letzte Woche</string>
+    <string name="last_month">Letzten Monat</string>
+    <string name="last_year">Letzten Jahr</string>
 </resources>

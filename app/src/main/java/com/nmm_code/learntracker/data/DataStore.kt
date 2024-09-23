@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +25,10 @@ class DataStoreState<T>(private val context: Context, private val key: Preferenc
         val SELECT_INFO = booleanPreferencesKey("select_info")
         val PATH = stringPreferencesKey("path")
         val TODO_ID = intPreferencesKey("todo_id")
+
+        val TIME  = longPreferencesKey("timer")
+        val PAUSE  = longPreferencesKey("pause")
+        val TIMER_STATE = intPreferencesKey("timer_state")
     }
 
     suspend fun get(default: T): T {

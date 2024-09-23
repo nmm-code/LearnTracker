@@ -199,7 +199,7 @@ class SubjectsActivity : ComponentActivity() {
             lifecycleScope.launch {
                 list.removeAt(index)
 
-                val dataTimer = TimerActivityData()
+                val dataTimer = TimerActivityData
                 var idx = 0
                 val subjects = dataTimer.read<TimerActivity>(this@SubjectsActivity).filter { it.id != index }.map {
                     it.id = idx

@@ -91,9 +91,12 @@ private const val BOX_WIDTH = 150
 val OPTION = listOf(
     Pair(R.string.blue, Color(57, 96, 187)),
     Pair(R.string.red, Color(160, 51, 51)),
-    Pair(R.string.green, Color(18, 83, 11)),
-    Pair(R.string.orange, Color(175, 160, 18)),
-    Pair(R.string.black, Color(1, 1, 1))
+    Pair(R.string.green, Color(47, 221, 29, 255)),
+    Pair(R.string.orange, Color(255, 163, 3, 255)),
+    Pair(R.string.magenta, Color(67, 13, 175, 255)),
+    Pair(R.string.pink, Color(194, 54, 117, 255)),
+    Pair(R.string.cyan, Color(22, 197, 162, 255)),
+    Pair(R.string.yellow, Color(234, 255, 0, 255)),
 )
 
 class WorkingTitleActivity : ComponentActivity() {
@@ -203,7 +206,7 @@ class WorkingTitleActivity : ComponentActivity() {
         Scaffold(
             topBar = {
                 AnimatedVisibility(visible = animate, enter = fadeIn(tween(500))) {
-                    TopBar(title = title) { navigatePageBack() }
+                    TopBar(title = title, onClick = { navigatePageBack() })
                 }
             },
             bottomBar = {

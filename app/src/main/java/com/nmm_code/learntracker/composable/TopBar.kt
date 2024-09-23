@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -14,6 +14,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import com.nmm_code.learntracker.pages.MainActivity
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline2
@@ -23,7 +25,9 @@ import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline2
 @Composable
 fun TopBar(
     modifier: Modifier = Modifier, title: String, icon: Boolean = true,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    actions: (() -> Unit)? = null,
+    actionsImageVector: ImageVector = Icons.Default.FilterAlt
 ) {
     val context: Context = LocalContext.current
     CenterAlignedTopAppBar(
@@ -39,7 +43,7 @@ fun TopBar(
             if (icon)
                 IconButton(onClick = {
                     if (onClick == null) {
-                        context.startActivity(Intent(context,MainActivity::class.java))
+                        context.startActivity(Intent(context, MainActivity::class.java))
                         (context as Activity).finish()
                     } else
                         onClick()
@@ -47,6 +51,16 @@ fun TopBar(
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = "back icons"
+                    )
+                }
+        },
+        actions = {
+            if (actions != null)
+                IconButton(onClick = actions) {
+                    Icon(
+                        imageVector = actionsImageVector,
+                        contentDescription = "action icons",
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
         }

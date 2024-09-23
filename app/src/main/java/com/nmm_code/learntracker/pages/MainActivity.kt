@@ -9,12 +9,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
@@ -42,6 +42,8 @@ import com.nmm_code.learntracker.data.DataStoreState
 import com.nmm_code.learntracker.data.Subject
 import com.nmm_code.learntracker.data.SubjectsData
 import com.nmm_code.learntracker.data.TimerActivityData
+import com.nmm_code.learntracker.data.Todo
+import com.nmm_code.learntracker.data.TodoData
 import com.nmm_code.learntracker.pre.WorkingTitleActivity
 import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
 import com.nmm_code.learntracker.ui.theme.getAccessibleTextColor
@@ -191,8 +193,7 @@ class MainActivity : ComponentActivity() {
                 )
             }
             navigationElements.forEachIndexed { idx, item ->
-
-                item(span =  StaggeredGridItemSpan.SingleLane) {
+                item(span = StaggeredGridItemSpan.SingleLane) {
                     BoxElement(item, idx, snackBar)
                 }
 
@@ -204,12 +205,12 @@ class MainActivity : ComponentActivity() {
     fun BoxElement(elem: NavigationElements, idx: Int, snackbarHostState: SnackbarHostState) {
         val color = getAccessibleTextColor(elem.color)
 
-        val modifier = if (idx != 1 && idx != 3 && idx != 5) Modifier
-            .size(BOX_WIDTH.dp) else
-            Modifier
-                .height((BOX_WIDTH * 2).dp)
-                .width(BOX_WIDTH.dp)
+        val modifier = Modifier
+            .aspectRatio(1f)
+            .size(BOX_WIDTH.dp)
 
+        val title = getTextOfElem(elem)
+        if (title != null)
         Surface(
             color = elem.color,
             onClick = {
@@ -278,7 +279,7 @@ class MainActivity : ComponentActivity() {
                     color = color,
                 )
                 Paragraph2(
-                    text = getTextOfElem(elem),
+                    text = title,
                     color = color,
                     modifier = Modifier
                         .align(Alignment.BottomStart)
@@ -288,25 +289,49 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun getTextOfElem(elem: NavigationElements): String {
+    @Composable
+    private fun getTextOfElem(elem: NavigationElements): String? {
         return when (elem.id) {
             R.drawable.ic_calendar -> {
                 val today = LocalDate.now()
                 val locale = Locale.getDefault()
-                val dayOfWeek = today.dayOfWeek.getDisplayName(TextStyle.SHORT, locale)
                 val month = today.month.getDisplayName(TextStyle.SHORT, locale)
 
                 "${today.dayOfMonth}. $month"
             }
 
             R.drawable.ic_timer -> {
-                val list = TimerActivityData.mergeLast2Weeks(TimerActivityData().read(this))
+                val list = TimerActivityData.mergeLast2Weeks(TimerActivityData.read(this))
                 val minute = list.sumOf { it.seconds } / 60
                 val hour = list.sumOf { it.seconds } / 3600
                 if (minute.toInt() == 0) "" else getString(R.string.recent_tracked) + ": %02d:%02d".format(
                     hour,
                     minute
                 )
+            }
+
+            R.drawable.ic_subjects -> {
+                val list = SubjectsData.read<Subject>(this@MainActivity)
+
+                if (list.isNotEmpty())
+                    return list.size.toString() + " " + stringResource(R.string.subjects)
+
+                return ""
+            }
+            R.drawable.ic_tasks -> {
+                val list = TodoData.read<Todo>(this@MainActivity)
+
+                if (list.isNotEmpty())
+                    return list.size.toString() + " " + stringResource(R.string.tasks)
+
+                return ""
+            }
+            R.drawable.ic_dashboard -> {
+                val list = TimerActivityData.mergeLast2Weeks(TimerActivityData.read(this))
+                if (list.isEmpty())
+                    return null
+                else
+                    return ""
             }
 
             else -> ""
