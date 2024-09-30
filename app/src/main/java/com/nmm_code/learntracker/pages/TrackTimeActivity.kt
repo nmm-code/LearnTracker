@@ -6,8 +6,10 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -41,6 +43,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -71,6 +74,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.nmm_code.learntracker.R
 import com.nmm_code.learntracker.composable.TopBar
 import com.nmm_code.learntracker.data.Subject
@@ -82,6 +88,7 @@ import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
 import com.nmm_code.learntracker.ui.theme.space
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline1
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline2
+import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph1
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph1H
 import kotlinx.coroutines.delay
 import java.time.LocalDate
@@ -123,11 +130,47 @@ class TrackTimeActivity : ComponentActivity() {
 
         setContent {
             LearnTrackerTheme {
-                TimerPage()
+                TimerPageWithPermission()
             }
         }
     }
 
+    @OptIn(ExperimentalPermissionsApi::class)
+    @Composable
+    fun TimerPageWithPermission(modifier: Modifier = Modifier) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val notificationPermissionState =
+                rememberPermissionState(permission = android.Manifest.permission.POST_NOTIFICATIONS)
+
+            if (notificationPermissionState.status.isGranted) {
+                TimerPage(modifier = modifier)
+            } else {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Headline1(
+                            text = stringResource(R.string.time_track_need_permission_for_notification),
+                            wrap = true,
+                            textAlign = TextAlign.Center
+                        )
+                        Button(onClick = {
+                            val intent = Intent(
+                                ACTION_APPLICATION_DETAILS_SETTINGS,
+                                Uri.fromParts("package", packageName, null)
+                            )
+                            startActivity(intent)
+                        }) {
+                            Paragraph1(text = stringResource(R.string.set_permission),color = MaterialTheme.colorScheme.onBackground)
+                        }
+                    }
+                }
+                LaunchedEffect(Unit) {
+                    notificationPermissionState.launchPermissionRequest()
+                }
+            }
+        } else {
+            TimerPage(modifier = modifier)
+        }
+    }
 
     @Preview(showBackground = true)
     @Composable
@@ -142,12 +185,13 @@ class TrackTimeActivity : ComponentActivity() {
         }
     }
 
-    // TODO timer inaccurate change needed/?
+
     @Composable
     fun ClockPage() {
         val local = LocalDate.now()
         val list =
-            TimerActivityData.mergeLast2Weeks(TimerActivityData.read(this)).toMutableStateList()
+            TimerActivityData.mergeLast2Weeks(TimerActivityData.read(this))
+                .toMutableStateList()
 
         val activeIndex = remember {
             mutableIntStateOf(0)
@@ -165,6 +209,9 @@ class TrackTimeActivity : ComponentActivity() {
         }
     }
 
+    private fun getTitleOfIndex(index: Int): Subject {
+        return data.read<Subject>(this)[index]
+    }
 
     @Composable
     fun RecentActivity(modifier: Modifier = Modifier, list: SnapshotStateList<TimerActivity>) {
@@ -189,7 +236,7 @@ class TrackTimeActivity : ComponentActivity() {
                     )
                 }
                 items(list) {
-                    val elem = TimerActivityData.getTitleOfIndex(this@TrackTimeActivity, it.id)
+                    val elem = getTitleOfIndex(it.id)
                     Surface(
                         color = Color(elem.color),
                         shape = RoundedCornerShape(MaterialTheme.space.padding2),
