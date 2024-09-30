@@ -59,7 +59,7 @@ class TodoPage : ComponentActivity() {
         runBlocking {
             idx = DataStoreState(this@TodoPage, DataStoreState.TODO_ID).get(0)
         }
-        val todos = TodoData.read<Todo>(this).toMutableList()
+        val todos = TodoData.getList(this).toMutableList()
 
         var title by remember {
            mutableStateOf(TextFieldValue(todos[idx].title))
@@ -87,7 +87,7 @@ class TodoPage : ComponentActivity() {
                         title = it
                         lifecycleScope.launch {
                             todos[idx] = Todo(title.text, text.text.split('\n'))
-                            TodoData.save(this@TodoPage, todos)
+                            TodoData.saveList(this@TodoPage, todos)
                         }
                     },
                     visualTransformation = VisualTransformation.None,
@@ -118,7 +118,7 @@ class TodoPage : ComponentActivity() {
                         text = newText
                         lifecycleScope.launch {
                             todos[idx] = Todo(title.text, text.text.split('\n'))
-                            TodoData.save(this@TodoPage, todos)
+                            TodoData.saveList(this@TodoPage, todos)
                         }
                     },
                     visualTransformation = VisualTransformation.None,

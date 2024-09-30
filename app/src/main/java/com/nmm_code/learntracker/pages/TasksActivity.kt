@@ -59,7 +59,7 @@ class TasksActivity : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun TasksPage(modifier: Modifier = Modifier) {
-        val list = TodoData.read<Todo>(this).toMutableStateList()
+        val list = TodoData.getList(this).toMutableStateList()
         var alert by remember {
             mutableStateOf(false)
         }
@@ -71,7 +71,7 @@ class TasksActivity : ComponentActivity() {
             ConfirmAlert(name = list[idx].title, confirm = true, onConfirm = {
                 alert = false
                 list.removeAt(idx)
-                TodoData.save(this@TasksActivity, list)
+                TodoData.saveList(this@TasksActivity, list)
             }) { alert = false }
         }
         Scaffold(
@@ -82,7 +82,7 @@ class TasksActivity : ComponentActivity() {
                 ExtendedFloatingActionButton(
                     onClick = {
                         list.add(Todo("", listOf("")))
-                        TodoData.save(this@TasksActivity, list)
+                        TodoData.saveList(this@TasksActivity, list)
                     },
                     Modifier.padding(bottom = 50.dp)
                 ) {

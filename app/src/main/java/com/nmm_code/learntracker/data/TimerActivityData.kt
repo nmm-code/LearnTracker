@@ -32,8 +32,11 @@ object TimerActivityData : Data<TimerActivity>() {
     }
 
     override val fileName: String = "/timer.bin"
+    
+    override fun getList(context: Context): List<TimerActivity> = super.read<TimerActivity>(context)
+    override fun saveList(context: Context, list: List<TimerActivity>) = super.save<TimerActivity>(context, list)
 
     fun getTitleOfIndex(context: Context, index: Int): Subject {
-        return SubjectsData.read<Subject>(context)[index]
+        return SubjectsData.getList(context)[index]
     }
 }

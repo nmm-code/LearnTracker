@@ -12,9 +12,11 @@ import java.io.File
 @Serializable
 abstract class Data<T>(val local: Boolean = true) {
     abstract val fileName: String
+    abstract fun getList(context: Context) : List<T>
+    abstract fun saveList(context: Context, list: List<T>)
 
     @OptIn(ExperimentalSerializationApi::class)
-    inline fun <reified T> read(context: Context): List<T> {
+    protected inline fun <reified T> read(context: Context): List<T> {
         var dir = ""
         if (local)
             runBlocking {
@@ -31,7 +33,7 @@ abstract class Data<T>(val local: Boolean = true) {
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    inline fun <reified T> save(context: Context, list: List<T>) {
+    protected inline fun <reified T> save(context: Context, list: List<T>) {
         var dir = ""
         if (local)
             runBlocking {
@@ -41,5 +43,6 @@ abstract class Data<T>(val local: Boolean = true) {
         val file = File(context.filesDir.path + dir + fileName)
         file.writeBytes(Cbor.encodeToByteArray(list))
     }
+
 }
 

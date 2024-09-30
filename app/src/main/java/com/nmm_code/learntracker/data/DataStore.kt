@@ -26,9 +26,8 @@ class DataStoreState<T>(private val context: Context, private val key: Preferenc
         val PATH = stringPreferencesKey("path")
         val TODO_ID = intPreferencesKey("todo_id")
 
-        val TIME  = longPreferencesKey("timer")
-        val PAUSE  = longPreferencesKey("pause")
-        val TIMER_STATE = intPreferencesKey("timer_state")
+        val SECONDS  = longPreferencesKey("seconds")
+        val TIME_SINCE  = longPreferencesKey("time_since")
     }
 
     suspend fun get(default: T): T {

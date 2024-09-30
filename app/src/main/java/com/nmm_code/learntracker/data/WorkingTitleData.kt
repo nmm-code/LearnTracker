@@ -1,22 +1,7 @@
 package com.nmm_code.learntracker.data
 
-import androidx.datastore.core.Serializer
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.KSerializer
+import android.content.Context
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationException
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.serialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.Json
-import java.io.InputStream
-import java.io.OutputStream
-import java.time.LocalDate
 
 
 enum class WorkingTitleType {
@@ -45,4 +30,6 @@ data class WorkingTitle(
 
 object WorkingTitleData : Data<WorkingTitle>(false) {
     override val fileName: String = "/working-tiles.bin"
+    override fun getList(context: Context): List<WorkingTitle> = super.read<WorkingTitle>(context)
+    override fun saveList(context: Context, list: List<WorkingTitle>) = super.save<WorkingTitle>(context, list)
 }

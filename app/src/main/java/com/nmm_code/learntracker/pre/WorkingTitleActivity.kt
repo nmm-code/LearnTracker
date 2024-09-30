@@ -150,7 +150,7 @@ class WorkingTitleActivity : ComponentActivity() {
         }
     }
 
-    private fun getList() = data.read<WorkingTitle>(this)
+    private fun getList() = data.getList(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -289,7 +289,7 @@ class WorkingTitleActivity : ComponentActivity() {
             }
 
             list.removeAt(index)
-            data.save(this@WorkingTitleActivity, list)
+            data.saveList(this@WorkingTitleActivity, list)
         }) { confirm = false }
 
 
@@ -361,7 +361,7 @@ class WorkingTitleActivity : ComponentActivity() {
                                             type = type ?: WorkingTitleType.WORK
                                         )
                                 }
-                                data.save(this@WorkingTitleActivity, list)
+                                data.saveList(this@WorkingTitleActivity, list)
                                 onClose()
                             }
                         },

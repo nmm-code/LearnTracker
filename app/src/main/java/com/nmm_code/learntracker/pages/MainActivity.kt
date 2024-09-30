@@ -1,5 +1,6 @@
 package com.nmm_code.learntracker.pages
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -44,6 +45,7 @@ import com.nmm_code.learntracker.data.SubjectsData
 import com.nmm_code.learntracker.data.TimerActivityData
 import com.nmm_code.learntracker.data.Todo
 import com.nmm_code.learntracker.data.TodoData
+import com.nmm_code.learntracker.logic.TimeUtils
 import com.nmm_code.learntracker.pre.WorkingTitleActivity
 import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
 import com.nmm_code.learntracker.ui.theme.getAccessibleTextColor
@@ -201,6 +203,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     @Composable
     fun BoxElement(elem: NavigationElements, idx: Int, snackbarHostState: SnackbarHostState) {
         val color = getAccessibleTextColor(elem.color)
@@ -234,7 +237,7 @@ class MainActivity : ComponentActivity() {
                     when (elem.id) {
                         R.drawable.ic_timer -> {
                             val list =
-                                SubjectsData.read<Subject>(this)
+                                SubjectsData.getList(this)
 
                             if (list.isNotEmpty())
                                 startActivity(Intent(this@MainActivity, elem.activity))
@@ -301,17 +304,13 @@ class MainActivity : ComponentActivity() {
             }
 
             R.drawable.ic_timer -> {
-                val list = TimerActivityData.mergeLast2Weeks(TimerActivityData.read(this))
-                val minute = list.sumOf { it.seconds } / 60
-                val hour = list.sumOf { it.seconds } / 3600
-                if (minute.toInt() == 0) "" else getString(R.string.recent_tracked) + ": %02d:%02d".format(
-                    hour,
-                    minute
-                )
+                val list = TimerActivityData.mergeLast2Weeks(TimerActivityData.getList(this))
+                val seconds = list.sumOf { it.seconds }
+                stringResource(R.string.recent_tracked) + ": " + TimeUtils.formatSeconds(seconds)
             }
 
             R.drawable.ic_subjects -> {
-                val list = SubjectsData.read<Subject>(this@MainActivity)
+                val list = SubjectsData.getList(this@MainActivity)
 
                 if (list.isNotEmpty())
                     return list.size.toString() + " " + stringResource(R.string.subjects)
@@ -319,7 +318,7 @@ class MainActivity : ComponentActivity() {
                 return ""
             }
             R.drawable.ic_tasks -> {
-                val list = TodoData.read<Todo>(this@MainActivity)
+                val list = TodoData.getList(this@MainActivity)
 
                 if (list.isNotEmpty())
                     return list.size.toString() + " " + stringResource(R.string.tasks)
@@ -327,7 +326,7 @@ class MainActivity : ComponentActivity() {
                 return ""
             }
             R.drawable.ic_dashboard -> {
-                val list = TimerActivityData.mergeLast2Weeks(TimerActivityData.read(this))
+                val list = TimerActivityData.mergeLast2Weeks(TimerActivityData.getList(this))
                 if (list.isEmpty())
                     return null
                 else

@@ -15,12 +15,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -33,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,16 +39,19 @@ import com.nmm_code.learntracker.composable.PieChartWithLegend
 import com.nmm_code.learntracker.composable.TopBar
 import com.nmm_code.learntracker.data.TimerActivity
 import com.nmm_code.learntracker.data.TimerActivityData
+import com.nmm_code.learntracker.logic.TimeUtils
 import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
 import com.nmm_code.learntracker.ui.theme.getAccessibleTextColor
 import com.nmm_code.learntracker.ui.theme.space
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline1
+import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline2
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph1
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph1H
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph2
 import java.time.LocalDate
 
 class DashboardActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -59,14 +59,6 @@ class DashboardActivity : ComponentActivity() {
             LearnTrackerTheme {
                 DashboardPage()
             }
-        }
-    }
-
-    @Preview
-    @Composable
-    private fun ff() {
-        LearnTrackerTheme {
-            DashboardPage()
         }
     }
 
@@ -124,22 +116,28 @@ class DashboardActivity : ComponentActivity() {
                 })
             },
             modifier = Modifier
-        ) { it ->
-            Column(
+        ) {
+            val list = getList(state)
+            LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .padding(it)
-                    .padding(horizontal = MaterialTheme.space.padding4)
-                    .verticalScroll(
-                        rememberScrollState()
-                    )
             ) {
-
-                val list = getList(state)
-                Diagram(list)
-                Stats(list)
-                Headline1(text = "History", modifier = Modifier.padding(vertical = 50.dp))
-                History(list)
+                item {
+                    Column(
+                        Modifier.padding(horizontal = MaterialTheme.space.padding4)
+                    ) {
+                        Diagram(list)
+                        Stats(list)
+                        Headline1(
+                            text = stringResource(R.string.history),
+                            modifier = Modifier.padding(vertical = 50.dp)
+                        )
+                    }
+                }
+                item {
+                    History(list)
+                }
             }
         }
     }
@@ -147,9 +145,7 @@ class DashboardActivity : ComponentActivity() {
     @Composable
     private fun Diagram(list: List<TimerActivity>) {
         val list = TimerActivityData.merge(list)
-
         val data = list.map { it.seconds.toFloat() }
-
         val dataStore = TimerActivityData
         val names = list.map { dataStore.getTitleOfIndex(this, it.id).title }
         val colors = list.map { Color(dataStore.getTitleOfIndex(this, it.id).color) }
@@ -176,22 +172,25 @@ class DashboardActivity : ComponentActivity() {
                 Box(
                     Modifier
                         .padding(horizontal = 10.dp)
-                        .height(200.dp)
-                        .width(140.dp)
+                        .size(200.dp)
                         .clip(RoundedCornerShape(16))
                         .background(Color(l.color))
                         .padding(20.dp)
                 ) {
-                    Headline1(
-                        text = (item.seconds / 3600).toString() + "h",
+                    Headline2(
+                        text = TimeUtils.formatSeconds(item.seconds),
                         color = getAccessibleTextColor(color),
                         modifier = Modifier.align(Alignment.TopEnd)
                     )
                     Column(Modifier.align(Alignment.BottomStart)) {
-
-                        Headline1(text = l.title, color = getAccessibleTextColor(color))
+                        Paragraph1H(
+                            text = l.title,
+                            color = getAccessibleTextColor(color),
+                            softWrap = true
+                        )
+                        Spacer(modifier = Modifier.size(10.dp))
                         Paragraph2(
-                            text = "Total Time",
+                            text = getString(R.string.total_time),
                             color = getAccessibleTextColor(color)
                         )
                     }
@@ -204,19 +203,26 @@ class DashboardActivity : ComponentActivity() {
     @Composable
     private fun Stats(list: List<TimerActivity>) {
 
-        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth()) {
             val color = MaterialTheme.colorScheme.primary
             val second = MaterialTheme.colorScheme.error
 
             Surface(
                 shape = RoundedCornerShape(MaterialTheme.space.padding2),
                 color = color,
+                modifier = Modifier
+                    .weight(1f)
+                    .height(120.dp)
             ) {
                 Column(
                     verticalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.padding(20.dp)
                 ) {
-                    Paragraph1(text = "Time spend", color = getAccessibleTextColor(color))
+                    Paragraph1(
+                        text = stringResource(R.string.time_spend),
+                        softWrap = true,
+                        color = getAccessibleTextColor(color)
+                    )
                     Spacer(modifier = Modifier.size(10.dp))
                     Paragraph1H(
                         text = list.sumOf { item -> item.seconds / 3600 }.toString() + " h",
@@ -224,18 +230,25 @@ class DashboardActivity : ComponentActivity() {
                     )
                 }
             }
+            Spacer(modifier = Modifier.size(20.dp))
             Surface(
                 shape = RoundedCornerShape(MaterialTheme.space.padding2),
-                color = second
+                color = second,
+                modifier = Modifier
+                    .weight(1f)
+                    .height(120.dp)
             ) {
                 Column(
                     verticalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.padding(20.dp)
                 ) {
-                    Paragraph1(text = "Longest Streak", color = getAccessibleTextColor(second))
+                    Paragraph1(
+                        text = stringResource(R.string.longest) + " Streak",
+                        color = getAccessibleTextColor(second)
+                    )
                     Spacer(modifier = Modifier.size(10.dp))
                     Paragraph1H(
-                        text = getStreak(list).toString() + " Days",
+                        text = getStreak(list).toString() + " " + stringResource(R.string.days),
                         color = getAccessibleTextColor(second)
                     )
                 }
@@ -245,7 +258,7 @@ class DashboardActivity : ComponentActivity() {
 
     @Composable
     private fun getList(state: Filter): List<TimerActivity> {
-        val list = TimerActivityData.read<TimerActivity>(this)
+        val list = TimerActivityData.getList(this)
         val local = LocalDate.now()
         return when (state) {
             Filter.LAST_YEAR -> {
@@ -255,6 +268,7 @@ class DashboardActivity : ComponentActivity() {
                     activityDate.isAfter(oneYearAgo) && activityDate.isBefore(local.plusDays(1))
                 }
             }
+
             Filter.LAST_WEEK -> {
                 val oneWeekAgo = local.minusWeeks(1)
                 list.filter {
@@ -262,6 +276,7 @@ class DashboardActivity : ComponentActivity() {
                     activityDate.isAfter(oneWeekAgo) && activityDate.isBefore(local.plusDays(1))
                 }
             }
+
             Filter.LAST_MONTH -> {
                 val oneMonthAgo = local.minusMonths(1)
                 list.filter {

@@ -5,10 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
@@ -53,6 +51,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import com.nmm_code.learntracker.R
 import com.nmm_code.learntracker.composable.AlertName
@@ -68,7 +67,7 @@ import com.nmm_code.learntracker.data.TimerActivityData
 import com.nmm_code.learntracker.pre.OPTION
 import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
 import com.nmm_code.learntracker.ui.theme.getAccessibleTextColor
-import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline1
+import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline2
 import kotlinx.coroutines.launch
 
 class SubjectsActivity : ComponentActivity() {
@@ -89,7 +88,7 @@ class SubjectsActivity : ComponentActivity() {
     @Composable
     fun SubjectsPage(modifier: Modifier = Modifier) {
         val list = remember {
-            data.read<Subject>(this).toMutableStateList()
+            data.getList(this).toMutableStateList()
         }
         var isModalOpen by remember { mutableIntStateOf(-1) }
 
@@ -127,7 +126,6 @@ class SubjectsActivity : ComponentActivity() {
                             onClick = { isModalOpen = idx },
                             modifier = Modifier
                                 .clip(RoundedCornerShape(16.dp))
-                                .border(2.dp, Color.Black, RoundedCornerShape(16.dp))
                                 .background(color)
                                 .aspectRatio(4f)
                         ) {
@@ -136,28 +134,15 @@ class SubjectsActivity : ComponentActivity() {
                                     .fillMaxSize()
                                     .background(color)
                             ) {
-                                Headline1(
+                                Headline2(
                                     text = item.title,
                                     color = getAccessibleTextColor(Color(item.color)),
+                                    wrap = true,
+                                    size = 20.sp,
                                     modifier = Modifier
                                         .padding(start = 30.dp)
                                         .align(Alignment.CenterStart)
                                 )
-                                Column(
-                                    horizontalAlignment = Alignment.End,
-                                    modifier = Modifier
-                                        .padding(end = 30.dp)
-                                        .align(Alignment.CenterEnd)
-                                ) {
-//                                Paragraph2(
-//                                    text = "18. April 1980",
-//                                    color = getAccessibleTextColor(item.second)
-//                                )
-//                                Paragraph2(
-//                                    text = "08:00",
-//                                    color = getAccessibleTextColor(item.second)
-//                                )
-                                }
                             }
                         }
                     }
@@ -201,14 +186,14 @@ class SubjectsActivity : ComponentActivity() {
 
                 val dataTimer = TimerActivityData
                 var idx = 0
-                val subjects = dataTimer.read<TimerActivity>(this@SubjectsActivity).filter { it.id != index }.map {
+                val Timers = dataTimer.getList(this@SubjectsActivity).filter { it.id != index }.map {
                     it.id = idx
                     idx++
                     it
                 }
-                dataTimer.save(this@SubjectsActivity, subjects)
+                dataTimer.saveList(this@SubjectsActivity, Timers)
 
-                data.save(this@SubjectsActivity, list)
+                data.saveList(this@SubjectsActivity, list)
             }
         }) { confirm = false }
 
@@ -252,12 +237,12 @@ class SubjectsActivity : ComponentActivity() {
                 ) {
                     IconButton(
                         onClick = {
-                            if (name.text.length <= 3) {
+                            if (name.text.length <= 3 || name.text.length > 40) {
                                 alert = true
                                 return@IconButton
                             }
                             lifecycleScope.launch {
-                                if (isAdding) { // adding or edit
+                                if (isAdding) {
                                     list.add(
                                         Subject(
                                             name.text,
@@ -270,7 +255,7 @@ class SubjectsActivity : ComponentActivity() {
                                         selectedColor.second.toArgb(),
                                     )
                                 }
-                                data.save(this@SubjectsActivity, list)
+                                data.saveList(this@SubjectsActivity, list)
                                 onClose()
                             }
                         },

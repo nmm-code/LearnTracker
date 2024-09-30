@@ -14,11 +14,11 @@
     <string name="dashboard">Dashboard</string>
     <string name="feedback">Feedback</string>
     <string name="privacy_title">Datenschutz</string>
-    <string name="recent_tracked">zuletzt:</string>
+    <string name="recent_tracked">zuletzt</string>
     <string name="add_name">Namen hinzufügen</string>
     <string name="add_new_subject">Neues Fach hinzufügen</string>
     <string name="invalid_name">Ungültiger Name</string>
-    <string name="the_name_needs_at_least_4_characters">Der Name muss mindestens 4 Zeichen haben</string>
+    <string name="the_name_needs_at_least_4_characters">Der Name muss mindestens 4 Zeichen haben und darf nicht länger als 40 Zeichen sein.</string>
     <string name="add_new_todolist">Neue Aufgabenliste hinzufügen</string>
     <string name="privacy">Datenschutz</string>
     <string name="accept">Akzeptieren</string>
@@ -55,4 +55,9 @@
     <string name="last_week">Letzte Woche</string>
     <string name="last_month">Letzten Monat</string>
     <string name="last_year">Letzten Jahr</string>
+    <string name="days">Tage</string>
+    <string name="longest">Längste</string>
+    <string name="time_spend">Aufgewendete Zeit</string>
+    <string name="total_time">Insgesamte Zeit</string>
+    <string name="history">Vergangene</string>
 </resources>
