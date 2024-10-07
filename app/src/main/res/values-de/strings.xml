@@ -60,4 +60,11 @@
     <string name="time_spend">Aufgewendete Zeit</string>
     <string name="total_time">Insgesamte Zeit</string>
     <string name="history">Vergangene</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="select_time">Wähle Zeit</string>
+    <string name="termin">Termin</string>
+    <string name="add_time">Zeit hinzufügen</string>
+    <string name="every_week">Jede Woche</string>
+    <string name="every_month">Jede Monat</string>
+    <string name="every_year">Jedes Year</string>
 </resources>

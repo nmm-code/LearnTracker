@@ -59,4 +59,11 @@
     <string name="time_spend">Time spent</string>
     <string name="total_time">Total Time</string>
     <string name="history">History</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_time">Select Time</string>
+    <string name="termin">Appointment</string>
+    <string name="add_time">Add time</string>
+    <string name="every_week">Every Week</string>
+    <string name="every_month">Every Month</string>
+    <string name="every_year">Every Year</string>
 </resources>

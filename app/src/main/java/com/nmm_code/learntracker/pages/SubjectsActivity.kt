@@ -59,12 +59,11 @@ import com.nmm_code.learntracker.composable.ColorDropDown
 import com.nmm_code.learntracker.composable.ConfirmAlert
 import com.nmm_code.learntracker.composable.IconRow
 import com.nmm_code.learntracker.composable.IconRowTexField
+import com.nmm_code.learntracker.composable.OPTION_COLOR
 import com.nmm_code.learntracker.composable.TopBar
 import com.nmm_code.learntracker.data.Subject
 import com.nmm_code.learntracker.data.SubjectsData
-import com.nmm_code.learntracker.data.TimerActivity
 import com.nmm_code.learntracker.data.TimerActivityData
-import com.nmm_code.learntracker.pre.OPTION
 import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
 import com.nmm_code.learntracker.ui.theme.getAccessibleTextColor
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline2
@@ -223,9 +222,9 @@ class SubjectsActivity : ComponentActivity() {
                 }
 
                 var selectedColor by remember {
-                    mutableStateOf(if (isAdding) OPTION[0] else OPTION.find {
+                    mutableStateOf(if (isAdding) OPTION_COLOR[0] else OPTION_COLOR.find {
                         it.second.toArgb() == entry.color
-                    } ?: OPTION[0])
+                    } ?: OPTION_COLOR[0])
                 }
 
                 Row(
@@ -286,11 +285,13 @@ class SubjectsActivity : ComponentActivity() {
                 HorizontalDivider(Modifier.padding(bottom = 20.dp))
 
                 IconRowTexField(
+                    modifier = Modifier,
                     icon = Icons.Default.ModeEdit,
                     value = name,
                     placeholderText = stringResource(R.string.add_name),
-                    modifier = Modifier
-                ) { name = it }
+                    { name = it },
+                    false
+                )
 
                 IconRow(
                     icon = Icons.Default.ColorLens

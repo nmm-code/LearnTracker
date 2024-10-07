@@ -27,7 +27,8 @@ fun IconRowTexField(
     icon: ImageVector,
     value: TextFieldValue,
     placeholderText: String,
-    changeValue: (it: TextFieldValue) -> Unit
+    changeValue: (it: TextFieldValue) -> Unit,
+    underline: Boolean = true
 ) {
     IconRow(icon) {
         TextField(
@@ -40,7 +41,10 @@ fun IconRowTexField(
             ),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = if (underline) Color.Black else Color.Transparent,
+                unfocusedIndicatorColor = if (underline) Color.Black else Color.Transparent,
+                disabledIndicatorColor = if (underline) Color.Black else Color.Transparent,
             ),
             placeholder = {
                 Paragraph1(
@@ -55,7 +59,7 @@ fun IconRowTexField(
 
 @Composable
 fun IconRow(
-    icon: ImageVector,
+    icon: ImageVector? = null,
     content: @Composable (Modifier) -> Unit
 ) {
     Row(
@@ -63,11 +67,15 @@ fun IconRow(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            Modifier.weight(3f)
-        )
+        if (icon != null)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                Modifier.weight(3f)
+            )
+         else {
+             Spacer(Modifier.weight(3f) )
+        }
         content(Modifier.weight(8f))
         Spacer(modifier = Modifier.weight(1f))
     }

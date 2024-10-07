@@ -27,10 +27,6 @@ val fontFamily = FontFamily(
 )
 
 val Typography = Typography(
-    displayLarge = TextStyle(fontFamily = fontFamily),
-    displayMedium = TextStyle(fontFamily = fontFamily),
-    displaySmall = TextStyle(fontFamily = fontFamily),
-    headlineLarge = TextStyle(fontFamily = fontFamily),
     headlineMedium = TextStyle(fontFamily = fontFamily),
     headlineSmall = TextStyle(fontFamily = fontFamily),
     titleLarge = TextStyle(fontFamily = fontFamily),

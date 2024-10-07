@@ -70,6 +70,7 @@ import com.nmm_code.learntracker.composable.AlertName
 import com.nmm_code.learntracker.composable.ColorDropDown
 import com.nmm_code.learntracker.composable.IconRow
 import com.nmm_code.learntracker.composable.IconRowTexField
+import com.nmm_code.learntracker.composable.OPTION_COLOR
 import com.nmm_code.learntracker.composable.TopBar
 import com.nmm_code.learntracker.data.DataStoreState
 import com.nmm_code.learntracker.data.WorkingTitle
@@ -87,17 +88,6 @@ import java.io.File
 import kotlin.io.path.ExperimentalPathApi
 
 private const val BOX_WIDTH = 150
-
-val OPTION = listOf(
-    Pair(R.string.blue, Color(57, 96, 187)),
-    Pair(R.string.red, Color(160, 51, 51)),
-    Pair(R.string.green, Color(47, 221, 29, 255)),
-    Pair(R.string.orange, Color(255, 163, 3, 255)),
-    Pair(R.string.magenta, Color(67, 13, 175, 255)),
-    Pair(R.string.pink, Color(194, 54, 117, 255)),
-    Pair(R.string.cyan, Color(22, 197, 162, 255)),
-    Pair(R.string.yellow, Color(234, 255, 0, 255)),
-)
 
 class WorkingTitleActivity : ComponentActivity() {
 
@@ -324,9 +314,9 @@ class WorkingTitleActivity : ComponentActivity() {
 
                 var selectedColor by remember {
                     // new entry or edit entry
-                    mutableStateOf(if (isAdding) OPTION[0] else OPTION.find {
+                    mutableStateOf(if (isAdding) OPTION_COLOR[0] else OPTION_COLOR.find {
                         it.second.toArgb() == entry!!.color
-                    } ?: OPTION[0])
+                    } ?: OPTION_COLOR[0])
                 }
 
                 Row(
@@ -391,19 +381,20 @@ class WorkingTitleActivity : ComponentActivity() {
                 }
                 HorizontalDivider(Modifier.padding(bottom = 20.dp))
                 IconRowTexField(
+                    modifier = Modifier.focusRequester(focusRequester),
                     icon = Icons.Default.ModeEdit,
                     value = name,
                     placeholderText = stringResource(id = R.string.add_name),
-                    modifier = Modifier.focusRequester(focusRequester)
-                ) { name = it }
+                    { name = it },
+                )
                 IconRowTexField(
                     icon = Icons.AutoMirrored.Filled.ShortText,
                     value = alias,
                     placeholderText = stringResource(R.string.add_alias),
-
-                    ) {
-                    alias = it
-                }
+                    changeValue = {
+                        alias = it
+                    },
+                    )
                 IconRow(
                     icon = Icons.Default.ColorLens
                 ) {
