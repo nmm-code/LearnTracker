@@ -10,14 +10,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowLeft
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
@@ -39,17 +37,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.nmm_code.learntracker.R
 import com.nmm_code.learntracker.composable.TopBar
 import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
 import com.nmm_code.learntracker.ui.theme.space
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline1
-import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline2
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph1
-import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph1H
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph2
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph2H
 import java.time.DayOfWeek
@@ -122,7 +120,7 @@ class CalendarActivity : ComponentActivity() {
                         contentDescription = null,
                         modifier = Modifier.padding(end = 15.dp)
                     )
-                    Text(text = "Add a new Termin")
+                    Text(text = stringResource(R.string.add_a_new))
                 }
             }
         ) {
@@ -308,8 +306,7 @@ class CalendarActivity : ComponentActivity() {
                         Pair(Duration(10, 30, 11, 0), "Deutsch"),
                         Pair(Duration(12, 30, 14, 0), "Mathe")
                     )
-                )
-                ,Pair<LocalDate, List<Pair<Duration, String>>>(
+                ), Pair<LocalDate, List<Pair<Duration, String>>>(
                     LocalDate.now().plusDays(8),
                     listOf(
                         Pair(Duration(9, 30, 10, 0), "Mathe"),
@@ -330,7 +327,7 @@ class CalendarActivity : ComponentActivity() {
                         Pair(Duration(10, 30, 11, 0), "Deutsch"),
                         Pair(Duration(12, 30, 14, 0), "Mathe")
                     )
-                ),Pair<LocalDate, List<Pair<Duration, String>>>(
+                ), Pair<LocalDate, List<Pair<Duration, String>>>(
                     LocalDate.now().plusDays(11),
                     listOf(
                         Pair(Duration(9, 30, 10, 0), "Mathe"),
@@ -358,7 +355,9 @@ class CalendarActivity : ComponentActivity() {
             items(list, key = { it.first }) { item ->
                 Row(Modifier.padding(vertical = 8.dp)) {
                     Column(
-                        modifier = Modifier.padding(4.dp).weight(2f),
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .weight(2f),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Paragraph2H(

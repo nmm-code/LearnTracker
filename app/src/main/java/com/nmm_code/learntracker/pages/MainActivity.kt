@@ -78,8 +78,7 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             DataStoreState(this@MainActivity, DataStoreState.PAGE).set(3)
             val path = DataStoreState(this@MainActivity, DataStoreState.PATH).get("")
-            val success = File(application.filesDir.path + path).mkdirs()
-            println(success)
+            File(application.filesDir.path + path).mkdirs()
         }
         setContent {
             LearnTrackerTheme {
@@ -91,7 +90,7 @@ class MainActivity : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun MainPage(modifier: Modifier = Modifier) {
-        val snackbarHostState = remember { SnackbarHostState() }
+        val snackBar = remember { SnackbarHostState() }
         Scaffold(
             topBar = {
                 TopBar(title = "Learn Tracker", onClick = {
@@ -112,14 +111,14 @@ class MainActivity : ComponentActivity() {
                 })
             },
             snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState)
+                SnackbarHost(hostState = snackBar)
             }
         ) {
             NavigationGrid(
                 Modifier
                     .padding(it)
                     .padding(horizontal = MaterialTheme.space.padding2),
-                snackbarHostState
+                snackBar
             )
         }
     }
@@ -205,18 +204,17 @@ class MainActivity : ComponentActivity() {
                         .height(MaterialTheme.space.padding5)
                 )
             }
-            navigationElements.forEachIndexed { idx, item ->
+            navigationElements.forEach { item ->
                 item(span = StaggeredGridItemSpan.SingleLane) {
-                    BoxElement(item, idx, snackBar)
+                    BoxElement(item, snackBar)
                 }
-
             }
         }
     }
 
     @SuppressLint("SuspiciousIndentation")
     @Composable
-    fun BoxElement(elem: NavigationElements, idx: Int, snackbarHostState: SnackbarHostState) {
+    fun BoxElement(elem: NavigationElements, snackBar: SnackbarHostState) {
         val color = getAccessibleTextColor(elem.color)
 
         val modifier = Modifier
@@ -254,7 +252,7 @@ class MainActivity : ComponentActivity() {
                                     startActivity(Intent(this@MainActivity, elem.activity))
                                 else {
                                     lifecycleScope.launch {
-                                        snackbarHostState.showSnackbar(getString(R.string.you_need_to_create_the_subjects_before_tracking))
+                                        snackBar.showSnackbar(getString(R.string.you_need_to_create_the_subjects_before_tracking))
                                     }
                                 }
                             }

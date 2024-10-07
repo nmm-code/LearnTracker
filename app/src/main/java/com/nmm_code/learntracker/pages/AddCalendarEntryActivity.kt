@@ -45,7 +45,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Interval
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -91,7 +90,7 @@ class AddCalendarEntryActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun Page(modifier: Modifier = Modifier) {
+    fun Page() {
         val timePickerState = rememberTimePickerState()
         val datePickerState =
             rememberDatePickerState(initialSelectedDateMillis = Calendar.getInstance().timeInMillis)
@@ -117,6 +116,9 @@ class AddCalendarEntryActivity : ComponentActivity() {
             mutableStateOf(true)
         }
         var interval by remember {
+            mutableIntStateOf(0)
+        }
+        var color by remember {
             mutableIntStateOf(0)
         }
 
@@ -158,6 +160,15 @@ class AddCalendarEntryActivity : ComponentActivity() {
                         this@AddCalendarEntryActivity,
                         OPTION_INTERVAL[interval]
                     ) { idx -> interval = idx }
+                }
+                IconRow(
+                    icon = Icons.Default.ColorLens
+                ) {
+                    ColorDropDown(
+                        it,
+                        this@AddCalendarEntryActivity,
+                        color,
+                    ) { c -> color = c }
                 }
                 Spacer(modifier = Modifier.size(10.dp))
                 HorizontalDivider()

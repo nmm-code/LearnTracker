@@ -44,8 +44,8 @@ val OPTION_COLOR = listOf(
 fun ColorDropDown(
     modifier: Modifier,
     context: Context,
-    selectedColor: Pair<Int, Color>,
-    onSelected: (it: Pair<Int, Color>) -> Unit,
+    selectedColor: Int,
+    onSelected: (it: Int) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -58,7 +58,7 @@ fun ColorDropDown(
     ) {
         TextField(
             readOnly = true,
-            value = context.getString(selectedColor.first),
+            value = context.getString(OPTION_COLOR[selectedColor].first),
             onValueChange = { },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
@@ -72,7 +72,10 @@ fun ColorDropDown(
             ),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor =  Color.Transparent,
+                disabledIndicatorColor =Color.Transparent,
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -84,7 +87,7 @@ fun ColorDropDown(
                 expanded = false
             }
         ) {
-            OPTION_COLOR.forEach { item ->
+            OPTION_COLOR.forEachIndexed { idx, item ->
                 DropdownMenuItem(
                     text = {
                         Row(horizontalArrangement = Arrangement.SpaceBetween) {
@@ -105,7 +108,7 @@ fun ColorDropDown(
                         }
                     },
                     onClick = {
-                        onSelected(item)
+                        onSelected(idx)
                         expanded = false
                     }
                 )
@@ -115,6 +118,7 @@ fun ColorDropDown(
 }
 
 val OPTION_INTERVAL = listOf(
+    R.string.doesn_t_repeat,
    R.string.every_week,
     R.string.every_month,
     R.string.every_year,
@@ -153,7 +157,10 @@ fun IntervalDropDown(
             ),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor =  Color.Transparent,
+                disabledIndicatorColor =Color.Transparent,
             ),
             modifier = Modifier
                 .fillMaxWidth()

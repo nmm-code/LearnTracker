@@ -66,4 +66,6 @@
     <string name="every_week">Every Week</string>
     <string name="every_month">Every Month</string>
     <string name="every_year">Every Year</string>
+    <string name="doesn_t_repeat">Doesn\'t Repeat</string>
+    <string name="add_a_new">Add a new Appointment</string>
 </resources>

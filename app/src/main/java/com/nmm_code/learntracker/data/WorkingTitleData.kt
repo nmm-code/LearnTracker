@@ -11,7 +11,7 @@ enum class WorkingTitleType {
 @Serializable
 data class WorkingTitle(
     var name: String,
-    val alias: String,
+    var alias: String,
     var color: Int,
     val path: String = createPath(),
     val type: WorkingTitleType

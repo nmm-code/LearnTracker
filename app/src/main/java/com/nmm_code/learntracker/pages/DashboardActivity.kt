@@ -144,11 +144,11 @@ class DashboardActivity : ComponentActivity() {
 
     @Composable
     private fun Diagram(list: List<TimerActivity>) {
-        val list = TimerActivityData.merge(list)
-        val data = list.map { it.seconds.toFloat() }
+        val mergedList = TimerActivityData.merge(list)
+        val data = mergedList.map { it.seconds.toFloat() }
         val dataStore = TimerActivityData
-        val names = list.map { dataStore.getTitleOfIndex(this, it.id).title }
-        val colors = list.map { Color(dataStore.getTitleOfIndex(this, it.id).color) }
+        val names = mergedList.map { dataStore.getTitleOfIndex(this, it.id).title }
+        val colors = mergedList.map { Color(dataStore.getTitleOfIndex(this, it.id).color) }
         Box(modifier = Modifier.fillMaxSize()) {
             PieChartWithLegend(
                 data,

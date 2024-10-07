@@ -85,7 +85,6 @@ import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph1
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.File
-import kotlin.io.path.ExperimentalPathApi
 
 private const val BOX_WIDTH = 150
 
@@ -232,7 +231,7 @@ class WorkingTitleActivity : ComponentActivity() {
      *      else -> Modal is idx of list and on long click edit Modal
      */
     @Composable
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalPathApi::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     private fun AddModalSheet(
         index: Int,
         list: SnapshotStateList<WorkingTitle>,
@@ -313,10 +312,15 @@ class WorkingTitleActivity : ComponentActivity() {
                 }
 
                 var selectedColor by remember {
-                    // new entry or edit entry
-                    mutableStateOf(if (isAdding) OPTION_COLOR[0] else OPTION_COLOR.find {
-                        it.second.toArgb() == entry!!.color
-                    } ?: OPTION_COLOR[0])
+                    mutableIntStateOf(
+                        if (isAdding) {
+                            0
+                        } else {
+                            val foundIndex =
+                                OPTION_COLOR.indexOfFirst { it.second.toArgb() == entry!!.color }
+
+                            if (foundIndex != -1) foundIndex else 0
+                        })
                 }
 
                 Row(
@@ -338,18 +342,19 @@ class WorkingTitleActivity : ComponentActivity() {
                                         WorkingTitle(
                                             name.text,
                                             alias.text,
-                                            selectedColor.second.toArgb(),
+                                            OPTION_COLOR[selectedColor].second.toArgb(),
                                             type = type ?: WorkingTitleType.WORK
                                         )
                                     )
                                 } else {
-                                    list[index] =
-                                        WorkingTitle(
-                                            name.text,
-                                            alias.text,
-                                            selectedColor.second.toArgb(),
-                                            type = type ?: WorkingTitleType.WORK
-                                        )
+                                    val path = list[index].path
+                                    list[index] = WorkingTitle(
+                                        name.text,
+                                        alias.text,
+                                        OPTION_COLOR[selectedColor].second.toArgb(),
+                                        path = path,
+                                        type = type ?: WorkingTitleType.WORK
+                                    )
                                 }
                                 data.saveList(this@WorkingTitleActivity, list)
                                 onClose()
@@ -394,7 +399,7 @@ class WorkingTitleActivity : ComponentActivity() {
                     changeValue = {
                         alias = it
                     },
-                    )
+                )
                 IconRow(
                     icon = Icons.Default.ColorLens
                 ) {
@@ -439,7 +444,11 @@ class WorkingTitleActivity : ComponentActivity() {
                 .combinedClickable(
                     onClick = {
 
-                        lifecycleScope.launch {
+                        runBlocking {
+                            DataStoreState(
+                                this@WorkingTitleActivity,
+                                DataStoreState.PATH
+                            ).set(getPath() + item.path)
                             startActivity(
                                 Intent(
                                     this@WorkingTitleActivity,
@@ -447,10 +456,6 @@ class WorkingTitleActivity : ComponentActivity() {
                                 )
                             )
                             finish()
-                            DataStoreState(
-                                this@WorkingTitleActivity,
-                                DataStoreState.PATH
-                            ).set(getPath() + item.path)
                         }
                     },
                     onLongClick = {

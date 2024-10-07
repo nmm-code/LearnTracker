@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
@@ -55,14 +54,14 @@ class TodoPage : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun Todos(modifier: Modifier = Modifier) {
-        var idx = -1
+        var idx: Int
         runBlocking {
             idx = DataStoreState(this@TodoPage, DataStoreState.TODO_ID).get(0)
         }
         val todos = TodoData.getList(this).toMutableList()
 
         var title by remember {
-           mutableStateOf(TextFieldValue(todos[idx].title))
+            mutableStateOf(TextFieldValue(todos[idx].title))
         }
         var text by remember {
             mutableStateOf(TextFieldValue(todos[idx].message.joinToString("\n")))

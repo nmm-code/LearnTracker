@@ -92,7 +92,7 @@ class ScheduleActivity : ComponentActivity() {
     }
 
     @Composable
-    fun ScheduleField(modifier: Modifier = Modifier) {
+    fun ScheduleField() {
         val list = (0..23).toMutableList()
         list.add(0)
         Box(Modifier.verticalScroll(rememberScrollState())) {
@@ -172,7 +172,7 @@ class ScheduleActivity : ComponentActivity() {
     }
 
     @Composable
-    fun WeekDays(modifier: Modifier = Modifier) {
+    fun WeekDays() {
         val defaultLocale: java.util.Locale = java.util.Locale.getDefault()
         val firstDayOfWeek: DayOfWeek = WeekFields.of(defaultLocale).firstDayOfWeek
         val daysOfWeek = DayOfWeek.entries
@@ -193,7 +193,7 @@ class ScheduleActivity : ComponentActivity() {
                 WeekDay(
                     item,
                     offset,
-                    { it -> offset = it },
+                    {  offset = it },
                     modifier = Modifier
                         .weight(1f)
                 )

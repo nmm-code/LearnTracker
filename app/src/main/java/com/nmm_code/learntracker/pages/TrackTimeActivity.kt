@@ -25,10 +25,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -46,6 +44,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
@@ -88,15 +87,11 @@ import com.nmm_code.learntracker.service.TimerService
 import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
 import com.nmm_code.learntracker.ui.theme.space
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline1
-import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline2
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph1
-import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph1H
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.util.Timer
 
-private const val dialogWidth = 400
 
 class TrackTimeActivity : ComponentActivity() {
     private val data = SubjectsData
@@ -140,32 +135,29 @@ class TrackTimeActivity : ComponentActivity() {
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
-    fun TimerPageWithPermission(modifier: Modifier = Modifier) {
+    fun TimerPageWithPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val notificationPermissionState =
                 rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
             if (notificationPermissionState.status.isGranted) {
-                TimerPage(modifier = modifier, true)
+                TimerPage(true)
             } else {
-                TimerPage(modifier = modifier, false)
+                TimerPage(false)
                 LaunchedEffect(Unit) {
                     notificationPermissionState.launchPermissionRequest()
                 }
             }
         } else {
-            TimerPage(modifier = modifier, true)
+            TimerPage(true)
         }
     }
 
     @Composable
-    fun TimerPage(modifier: Modifier = Modifier, isGranted: Boolean) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-        ) {
-            TopBar(title = stringResource(R.string.timer))
-            ClockPage(isGranted)
+    fun TimerPage(isGranted: Boolean) {
+        Scaffold(topBar = { TopBar(title = stringResource(R.string.timer)) }) {
+            Column(Modifier.padding(it), horizontalAlignment = Alignment.CenterHorizontally) {
+                ClockPage(isGranted)
+            }
         }
     }
 
@@ -189,7 +181,7 @@ class TrackTimeActivity : ComponentActivity() {
     }
 
     @Composable
-    fun RecentActivity(modifier: Modifier = Modifier, list: SnapshotStateList<TimerActivity>) {
+    fun RecentActivity(list: SnapshotStateList<TimerActivity>) {
         HorizontalDivider()
         LazyColumn(Modifier.fillMaxWidth()) {
             item {
@@ -484,7 +476,6 @@ class TrackTimeActivity : ComponentActivity() {
                                 horizontal = MaterialTheme.space.padding2,
                                 vertical = MaterialTheme.space.padding2
                             )
-                            .width(dialogWidth.dp)
                             .pointerInput(Unit) {
                                 detectTapGestures {
                                     onSelect(index)

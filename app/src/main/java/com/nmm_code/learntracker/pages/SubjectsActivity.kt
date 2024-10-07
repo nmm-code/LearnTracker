@@ -185,12 +185,12 @@ class SubjectsActivity : ComponentActivity() {
 
                 val dataTimer = TimerActivityData
                 var idx = 0
-                val Timers = dataTimer.getList(this@SubjectsActivity).filter { it.id != index }.map {
+                val timers = dataTimer.getList(this@SubjectsActivity).filter { it.id != index }.map {
                     it.id = idx
                     idx++
                     it
                 }
-                dataTimer.saveList(this@SubjectsActivity, Timers)
+                dataTimer.saveList(this@SubjectsActivity, timers)
 
                 data.saveList(this@SubjectsActivity, list)
             }
@@ -222,9 +222,15 @@ class SubjectsActivity : ComponentActivity() {
                 }
 
                 var selectedColor by remember {
-                    mutableStateOf(if (isAdding) OPTION_COLOR[0] else OPTION_COLOR.find {
-                        it.second.toArgb() == entry.color
-                    } ?: OPTION_COLOR[0])
+                    mutableIntStateOf(
+                        if (isAdding) {
+                            0
+                        } else {
+                            val foundIndex =
+                                OPTION_COLOR.indexOfFirst { it.second.toArgb() == entry.color }
+
+                           if (foundIndex != -1) foundIndex else 0
+                        })
                 }
 
                 Row(
@@ -245,13 +251,13 @@ class SubjectsActivity : ComponentActivity() {
                                     list.add(
                                         Subject(
                                             name.text,
-                                            selectedColor.second.toArgb(),
+                                            OPTION_COLOR[selectedColor].second.toArgb(),
                                         )
                                     )
                                 } else {
                                     list[index] = Subject(
                                         name.text,
-                                        selectedColor.second.toArgb(),
+                                        OPTION_COLOR[selectedColor].second.toArgb(),
                                     )
                                 }
                                 data.saveList(this@SubjectsActivity, list)

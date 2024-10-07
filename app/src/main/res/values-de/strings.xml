@@ -67,4 +67,6 @@
     <string name="every_week">Jede Woche</string>
     <string name="every_month">Jede Monat</string>
     <string name="every_year">Jedes Year</string>
+    <string name="doesn_t_repeat">Nicht Widerholen</string>
+    <string name="add_a_new">Termin hinzufügen</string>
 </resources>
