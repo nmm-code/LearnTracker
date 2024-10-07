@@ -1,5 +1,6 @@
 package com.nmm_code.learntracker.pages
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,15 +21,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowLeft
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Today
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +49,9 @@ import com.nmm_code.learntracker.ui.theme.space
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline1
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline2
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph1
+import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph1H
 import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph2
+import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph2H
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -60,7 +67,10 @@ class CalendarActivity : ComponentActivity() {
         else
             LocalDate.now().plusMonths(monthOffSet.intValue.toLong())
 
-    private fun getMonthList(daysInMonth: Int, firstDayOfMonth: LocalDate): MutableList<LocalDate?> {
+    private fun getMonthList(
+        daysInMonth: Int,
+        firstDayOfMonth: LocalDate
+    ): MutableList<LocalDate?> {
         val dayList = getDaysOfWeek()
 
         val list =
@@ -100,7 +110,22 @@ class CalendarActivity : ComponentActivity() {
         val monthOffSet = remember { mutableIntStateOf(0) }
         val today = offset2LocalDate(monthOffSet)
 
-        Scaffold(topBar = { TopBar(title = today.year.toString()) }) {
+        Scaffold(
+            topBar = { TopBar(title = today.year.toString()) },
+            floatingActionButton = {
+                ExtendedFloatingActionButton(
+                    onClick = {
+                        startActivity(Intent(this, AddCalendarEntryActivity::class.java))
+                    }) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = null,
+                        modifier = Modifier.padding(end = 15.dp)
+                    )
+                    Text(text = "Add a new Termin")
+                }
+            }
+        ) {
             Column(
                 Modifier
                     .padding(it)
@@ -108,7 +133,7 @@ class CalendarActivity : ComponentActivity() {
             ) {
                 CalendarHeader(monthOffSet, today)
                 Calendar(monthOffSet)
-                HorizontalDivider(color = MaterialTheme.colorScheme.onBackground)
+                HorizontalDivider()
                 Appointments(monthOffSet)
             }
         }
@@ -223,82 +248,159 @@ class CalendarActivity : ComponentActivity() {
     @Composable
     private fun Appointments(offset: MutableIntState) {
         // TODO getOfOffset
-        val list = listOf(
-            Pair<LocalDate, List<Pair<Duration, String>>>(
-                LocalDate.now(),
-                listOf(
-                    Pair(Duration(9, 30, 10, 0), "Mathe"),
-                    Pair(Duration(10, 30, 11, 0), "Deutsch"),
-                    Pair(Duration(12, 30, 14, 0), "Mathe")
+        val list = remember {
+            mutableStateListOf(
+
+                Pair<LocalDate, List<Pair<Duration, String>>>(
+                    LocalDate.now(),
+                    listOf(
+                        Pair(Duration(9, 30, 10, 0), "Mathe"),
+                        Pair(Duration(10, 30, 11, 0), "Deutsch"),
+                        Pair(Duration(12, 30, 14, 0), "Mathe")
+                    )
+                ),
+                Pair<LocalDate, List<Pair<Duration, String>>>(
+                    LocalDate.now().plusDays(1),
+                    listOf(
+                        Pair(Duration(9, 30, 10, 0), "Mathe"),
+                    )
+                ),
+                Pair<LocalDate, List<Pair<Duration, String>>>(
+                    LocalDate.now().plusDays(2),
+                    listOf(
+                        Pair(Duration(9, 30, 10, 0), "Mathe"),
+                        Pair(Duration(10, 30, 11, 0), "Deutsch"),
+                        Pair(Duration(12, 30, 14, 0), "Mathe")
+                    )
+                ),
+                Pair<LocalDate, List<Pair<Duration, String>>>(
+                    LocalDate.now().plusDays(3),
+                    listOf(
+                        Pair(Duration(9, 30, 10, 0), "Mathe"),
+                    )
+                ),
+                Pair<LocalDate, List<Pair<Duration, String>>>(
+                    LocalDate.now().plusDays(4),
+                    listOf(
+                        Pair(Duration(9, 30, 10, 0), "Mathe"),
+                        Pair(Duration(10, 30, 11, 0), "Deutsch"),
+                        Pair(Duration(12, 30, 14, 0), "Mathe")
+                    )
+                ),
+                Pair<LocalDate, List<Pair<Duration, String>>>(
+                    LocalDate.now().plusDays(5),
+                    listOf(
+                        Pair(Duration(9, 30, 10, 0), "Mathe"),
+                        Pair(Duration(10, 30, 11, 0), "Deutsch"),
+                        Pair(Duration(12, 30, 14, 0), "Mathe")
+                    )
+                ),
+                Pair<LocalDate, List<Pair<Duration, String>>>(
+                    LocalDate.now().plusDays(6),
+                    listOf(
+                        Pair(Duration(9, 30, 10, 0), "Mathe"),
+                    )
+                ),
+                Pair<LocalDate, List<Pair<Duration, String>>>(
+                    LocalDate.now().plusDays(7),
+                    listOf(
+                        Pair(Duration(9, 30, 10, 0), "Mathe"),
+                        Pair(Duration(10, 30, 11, 0), "Deutsch"),
+                        Pair(Duration(12, 30, 14, 0), "Mathe")
+                    )
                 )
-            ),
-            Pair<LocalDate, List<Pair<Duration, String>>>(
-                LocalDate.now().plusDays(1),
-                listOf(
-                    Pair(Duration(9, 30, 10, 0), "Mathe"),
-                )
-            ),
-            Pair<LocalDate, List<Pair<Duration, String>>>(
-                LocalDate.now().plusDays(2),
-                listOf(
-                    Pair(Duration(9, 30, 10, 0), "Mathe"),
-                    Pair(Duration(10, 30, 11, 0), "Deutsch"),
-                    Pair(Duration(12, 30, 14, 0), "Mathe")
+                ,Pair<LocalDate, List<Pair<Duration, String>>>(
+                    LocalDate.now().plusDays(8),
+                    listOf(
+                        Pair(Duration(9, 30, 10, 0), "Mathe"),
+                        Pair(Duration(10, 30, 11, 0), "Deutsch"),
+                        Pair(Duration(12, 30, 14, 0), "Mathe")
+                    )
+                ),
+                Pair<LocalDate, List<Pair<Duration, String>>>(
+                    LocalDate.now().plusDays(9),
+                    listOf(
+                        Pair(Duration(9, 30, 10, 0), "Mathe"),
+                    )
+                ),
+                Pair<LocalDate, List<Pair<Duration, String>>>(
+                    LocalDate.now().plusDays(10),
+                    listOf(
+                        Pair(Duration(9, 30, 10, 0), "Mathe"),
+                        Pair(Duration(10, 30, 11, 0), "Deutsch"),
+                        Pair(Duration(12, 30, 14, 0), "Mathe")
+                    )
+                ),Pair<LocalDate, List<Pair<Duration, String>>>(
+                    LocalDate.now().plusDays(11),
+                    listOf(
+                        Pair(Duration(9, 30, 10, 0), "Mathe"),
+                        Pair(Duration(10, 30, 11, 0), "Deutsch"),
+                        Pair(Duration(12, 30, 14, 0), "Mathe")
+                    )
+                ),
+                Pair<LocalDate, List<Pair<Duration, String>>>(
+                    LocalDate.now().plusDays(12),
+                    listOf(
+                        Pair(Duration(9, 30, 10, 0), "Mathe"),
+                    )
+                ),
+                Pair<LocalDate, List<Pair<Duration, String>>>(
+                    LocalDate.now().plusDays(13),
+                    listOf(
+                        Pair(Duration(9, 30, 10, 0), "Mathe"),
+                        Pair(Duration(10, 30, 11, 0), "Deutsch"),
+                        Pair(Duration(12, 30, 14, 0), "Mathe")
+                    )
                 )
             )
-        )
+        }
         LazyColumn {
-            items(list) {
-                Row(Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)) {
+            items(list, key = { it.first }) { item ->
+                Row(Modifier.padding(vertical = 8.dp)) {
                     Column(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.padding(4.dp).weight(2f),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        Paragraph2(
-                            text = it.first.dayOfWeek.getDisplayName(
+                        Paragraph2H(
+                            text = item.first.dayOfWeek.getDisplayName(
                                 TextStyle.SHORT,
                                 Locale.getDefault()
                             )
                         )
-                        Headline2(
-                            text = it.first.dayOfMonth.toString(),
+                        Headline1(
+                            text = item.first.dayOfMonth.toString(),
                             fontWeight = FontWeight.W300
                         )
                     }
-                    Spacer(modifier = Modifier.weight(0.5f))
 
-                    Column(
-                        Modifier
-                            .weight(8f)
-                    ) {
-                        it.second.forEach {
+                    Column(Modifier.weight(8f)) {
+                        item.second.forEach { entry ->
                             Box(
                                 modifier = Modifier
-                                    .padding(bottom = 10.dp)
+                                    .padding(bottom = 8.dp)
                                     .fillMaxWidth()
-                                    .clip(RoundedCornerShape(32))
                                     .background(MaterialTheme.colorScheme.primary)
-                                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                                    .padding(8.dp)
                             ) {
-                                Paragraph1(
-                                    text = it.second,
+                                Paragraph2H(
+                                    text = entry.second,
                                     color = Color.White,
                                     modifier = Modifier
                                         .align(Alignment.TopStart)
-                                        .padding(start = 16.dp)
+                                        .padding(start = 8.dp)
                                 )
-                                val k = it.first
+                                val timeRange = entry.first
                                 Paragraph2(
                                     text = "%02d:%02d - %02d:%02d".format(
-                                        k.startH,
-                                        k.startM,
-                                        k.endH,
-                                        k.endM
+                                        timeRange.startH,
+                                        timeRange.startM,
+                                        timeRange.endH,
+                                        timeRange.endM
                                     ),
                                     color = Color.White,
                                     modifier = Modifier
                                         .align(Alignment.TopStart)
-                                        .padding(start = 16.dp, top = 25.dp)
+                                        .padding(start = 8.dp, top = 25.dp)
                                 )
                             }
                         }

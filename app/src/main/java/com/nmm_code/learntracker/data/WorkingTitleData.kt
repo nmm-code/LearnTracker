@@ -30,6 +30,19 @@ data class WorkingTitle(
 
 object WorkingTitleData : Data<WorkingTitle>(false) {
     override val fileName: String = "/working-tiles.bin"
-    override fun getList(context: Context): List<WorkingTitle> = super.read<WorkingTitle>(context)
-    override fun saveList(context: Context, list: List<WorkingTitle>) = super.save<WorkingTitle>(context, list)
+
+    override var list: List<WorkingTitle>? = null
+
+    override fun getList(context: Context): List<WorkingTitle> {
+        if (list == null)
+            list = super.read(context)
+
+        return list as List<WorkingTitle>
+    }
+
+    override fun saveList(context: Context, list: List<WorkingTitle>) {
+        this.list = list
+
+        super.save(context, list)
+    }
 }

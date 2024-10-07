@@ -3,6 +3,7 @@ package com.nmm_code.learntracker.composable
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.FilterAlt
@@ -33,11 +34,11 @@ fun TopBar(
     CenterAlignedTopAppBar(
         title = { Headline2(text = title) },
         colors = TopAppBarColors(
-            MaterialTheme.colorScheme.background,
-            MaterialTheme.colorScheme.background,
+            Color.Transparent,
+            Color.Transparent,
             MaterialTheme.colorScheme.onBackground,
-            MaterialTheme.colorScheme.background,
-            MaterialTheme.colorScheme.background,
+            Color.Transparent,
+            Color.Transparent,
         ),
         navigationIcon = {
             if (icon)

@@ -39,12 +39,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.nmm_code.learntracker.R
 import com.nmm_code.learntracker.composable.TopBar
+import com.nmm_code.learntracker.data.CalendarData
 import com.nmm_code.learntracker.data.DataStoreState
-import com.nmm_code.learntracker.data.Subject
+import com.nmm_code.learntracker.data.NameData
 import com.nmm_code.learntracker.data.SubjectsData
 import com.nmm_code.learntracker.data.TimerActivityData
-import com.nmm_code.learntracker.data.Todo
 import com.nmm_code.learntracker.data.TodoData
+import com.nmm_code.learntracker.data.WorkingTitleData
 import com.nmm_code.learntracker.logic.TimeUtils
 import com.nmm_code.learntracker.pre.WorkingTitleActivity
 import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
@@ -106,6 +107,7 @@ class MainActivity : ComponentActivity() {
                             this@MainActivity,
                             DataStoreState.PATH
                         ).set(mergedPath)
+                        clearLists()
                     }
                 })
             },
@@ -122,6 +124,15 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun clearLists() {
+        TodoData.clear()
+        SubjectsData.clear()
+        TimerActivityData.clear()
+        WorkingTitleData.clear()
+        CalendarData.clear()
+        NameData.clear()
+    }
+
     @Composable
     private fun NavigationGrid(
         modifier: Modifier = Modifier,
@@ -132,43 +143,43 @@ class MainActivity : ComponentActivity() {
                 R.string.timer,
                 R.drawable.ic_timer,
                 Color(83, 109, 198, 255),
-                activity = TrackTimeActivity::class.java
+                TrackTimeActivity::class.java
             ),
             NavigationElements(
                 R.string.schedule,
                 R.drawable.ic_schedule,
-                color = Color(78, 185, 75, 255),
-                activity = ScheduleActivity::class.java
+                Color(78, 185, 75, 255),
+                ScheduleActivity::class.java
             ),
             NavigationElements(
                 R.string.calendar,
                 R.drawable.ic_calendar,
-                color = Color(194, 97, 184, 255),
-                activity = CalendarActivity::class.java
+                Color(194, 97, 184, 255),
+                CalendarActivity::class.java
             ),
             NavigationElements(
                 R.string.subjects,
                 R.drawable.ic_subjects,
-                color = Color(208, 72, 72, 255),
-                activity = SubjectsActivity::class.java
+                Color(208, 72, 72, 255),
+                SubjectsActivity::class.java
             ),
             NavigationElements(
                 R.string.dashboard,
                 R.drawable.ic_dashboard,
-                color = Color(103, 202, 202, 255),
-                activity = DashboardActivity::class.java
+                Color(103, 202, 202, 255),
+                DashboardActivity::class.java
             ),
             NavigationElements(
                 R.string.tasks,
                 R.drawable.ic_tasks,
-                color = Color(204, 220, 14, 255),
-                activity = TasksActivity::class.java
+                Color(204, 220, 14, 255),
+                TasksActivity::class.java
             ),
             NavigationElements(
                 R.string.feedback,
                 R.drawable.ic_send,
-                color = Color(6, 2, 22, 255),
-                activity = MainActivity::class.java
+                Color(6, 2, 22, 255),
+                MainActivity::class.java
             ),
         )
 
@@ -214,82 +225,82 @@ class MainActivity : ComponentActivity() {
 
         val title = getTextOfElem(elem)
         if (title != null)
-        Surface(
-            color = elem.color,
-            onClick = {
-                if (getString(elem.title) == "Feedback") {
-                    try {
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("market://details?id=$packageName")
+            Surface(
+                color = elem.color,
+                onClick = {
+                    if (getString(elem.title) == "Feedback") {
+                        try {
+                            startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("market://details?id=$packageName")
+                                )
                             )
-                        )
-                    } catch (e: ActivityNotFoundException) {
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+                        } catch (e: ActivityNotFoundException) {
+                            startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+                                )
                             )
-                        )
-                    }
-                } else {
-                    when (elem.id) {
-                        R.drawable.ic_timer -> {
-                            val list =
-                                SubjectsData.getList(this)
+                        }
+                    } else {
+                        when (elem.id) {
+                            R.drawable.ic_timer -> {
+                                val list =
+                                    SubjectsData.getList(this)
 
-                            if (list.isNotEmpty())
-                                startActivity(Intent(this@MainActivity, elem.activity))
-                            else {
-                                lifecycleScope.launch {
-                                    snackbarHostState.showSnackbar(getString(R.string.you_need_to_create_the_subjects_before_tracking))
+                                if (list.isNotEmpty())
+                                    startActivity(Intent(this@MainActivity, elem.activity))
+                                else {
+                                    lifecycleScope.launch {
+                                        snackbarHostState.showSnackbar(getString(R.string.you_need_to_create_the_subjects_before_tracking))
+                                    }
                                 }
                             }
-                        }
 
-                        else -> {
-                            startActivity(Intent(this@MainActivity, elem.activity))
+                            else -> {
+                                startActivity(Intent(this@MainActivity, elem.activity))
+                            }
                         }
                     }
-                }
-            },
-            shape = RoundedCornerShape(MaterialTheme.space.padding2),
-            modifier = modifier.padding(MaterialTheme.space.padding1)
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(
-                        horizontal = MaterialTheme.space.padding2,
-                        vertical = MaterialTheme.space.padding1
-                    )
+                },
+                shape = RoundedCornerShape(MaterialTheme.space.padding2),
+                modifier = modifier.padding(MaterialTheme.space.padding1)
             ) {
-                Icon(
-                    painterResource(id = elem.id),
-                    "Icon of the Box",
-                    Modifier
-                        .align(Alignment.TopEnd)
-                        .size((BOX_WIDTH / 2.5).dp),
-                    tint = color
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            horizontal = MaterialTheme.space.padding2,
+                            vertical = MaterialTheme.space.padding1
+                        )
+                ) {
+                    Icon(
+                        painterResource(id = elem.id),
+                        "Icon of the Box",
+                        Modifier
+                            .align(Alignment.TopEnd)
+                            .size((BOX_WIDTH / 2.5).dp),
+                        tint = color
+                    )
 
-                Headline2(
-                    text = stringResource(elem.title),
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(vertical = MaterialTheme.space.padding3),
-                    color = color,
-                )
-                Paragraph2(
-                    text = title,
-                    color = color,
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(vertical = MaterialTheme.space.padding0)
-                )
+                    Headline2(
+                        text = stringResource(elem.title),
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(vertical = MaterialTheme.space.padding3),
+                        color = color,
+                    )
+                    Paragraph2(
+                        text = title,
+                        color = color,
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(vertical = MaterialTheme.space.padding0)
+                    )
+                }
             }
-        }
     }
 
     @Composable
@@ -317,6 +328,7 @@ class MainActivity : ComponentActivity() {
 
                 return ""
             }
+
             R.drawable.ic_tasks -> {
                 val list = TodoData.getList(this@MainActivity)
 
@@ -325,6 +337,7 @@ class MainActivity : ComponentActivity() {
 
                 return ""
             }
+
             R.drawable.ic_dashboard -> {
                 val list = TimerActivityData.mergeLast2Weeks(TimerActivityData.getList(this))
                 if (list.isEmpty())

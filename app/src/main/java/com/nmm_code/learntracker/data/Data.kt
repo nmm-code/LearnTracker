@@ -8,12 +8,15 @@ import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.encodeToByteArray
 import java.io.File
+import java.util.Objects
 
 @Serializable
 abstract class Data<T>(val local: Boolean = true) {
     abstract val fileName: String
     abstract fun getList(context: Context) : List<T>
     abstract fun saveList(context: Context, list: List<T>)
+
+    abstract var list : List<T>?
 
     @OptIn(ExperimentalSerializationApi::class)
     protected inline fun <reified T> read(context: Context): List<T> {
@@ -44,5 +47,8 @@ abstract class Data<T>(val local: Boolean = true) {
         file.writeBytes(Cbor.encodeToByteArray(list))
     }
 
+    fun clear() {
+        list = null
+    }
 }
 
