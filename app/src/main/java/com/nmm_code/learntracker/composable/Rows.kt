@@ -28,7 +28,6 @@ fun IconRowTexField(
     value: TextFieldValue,
     placeholderText: String,
     changeValue: (it: TextFieldValue) -> Unit,
-    underline: Boolean = true
 ) {
     IconRow(icon) {
         TextField(
@@ -42,9 +41,9 @@ fun IconRowTexField(
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
-                focusedIndicatorColor = if (underline) Color.Black else Color.Transparent,
-                unfocusedIndicatorColor = if (underline) Color.Black else Color.Transparent,
-                disabledIndicatorColor = if (underline) Color.Black else Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
             ),
             placeholder = {
                 Paragraph1(

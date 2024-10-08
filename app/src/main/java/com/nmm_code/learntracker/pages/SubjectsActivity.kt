@@ -296,7 +296,6 @@ class SubjectsActivity : ComponentActivity() {
                     value = name,
                     placeholderText = stringResource(R.string.add_name),
                     { name = it },
-                    false
                 )
 
                 IconRow(

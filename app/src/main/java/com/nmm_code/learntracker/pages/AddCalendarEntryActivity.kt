@@ -138,7 +138,6 @@ class AddCalendarEntryActivity : ComponentActivity() {
                     value = name,
                     placeholderText = stringResource(id = R.string.add_name),
                     changeValue = { name = it },
-                    underline = false
                 )
                 Spacer(modifier = Modifier.size(10.dp))
                 HorizontalDivider()

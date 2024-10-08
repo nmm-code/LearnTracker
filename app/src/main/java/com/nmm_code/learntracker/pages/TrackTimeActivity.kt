@@ -22,17 +22,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.RestartAlt
@@ -42,9 +40,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
@@ -406,43 +404,23 @@ class TrackTimeActivity : ComponentActivity() {
             mutableStateOf(false)
         }
 
-        if (entries.isNotEmpty())
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(
-                    vertical = MaterialTheme.space.padding5,
-                    horizontal = MaterialTheme.space.padding6
-                )
-            ) {
-                val it = entries[activeIndex.intValue]
+        if (entries.isNotEmpty()) {
+            val it = entries[activeIndex.intValue]
+            TextButton(onClick = { isSelecting = true }, Modifier.padding(vertical = 40.dp).widthIn(200.dp,350.dp)) {
                 Canvas(
-                    Modifier
-                        .weight(1f)
-                        .aspectRatio(1f)
+                    Modifier.size(30.dp)
                 ) {
                     drawCircle(color = Color(it.color))
                 }
-                Spacer(Modifier.size(20.dp))
+                Spacer(modifier = Modifier.size(20.dp))
                 Headline1(
                     text = it.title,
                     size = 20.sp,
                     wrap = true,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.weight(8f)
                 )
-                Spacer(Modifier.size(20.dp))
-                IconButton(
-                    onClick = { isSelecting = !isSelecting },
-                    Modifier.weight(1f)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = "drop down icon",
-                        modifier = Modifier.fillMaxSize(),
-                        tint = MaterialTheme.colorScheme.onBackground
-                    )
-                }
             }
+        }
         if (isSelecting)
             SubjectDialog(
                 entries,

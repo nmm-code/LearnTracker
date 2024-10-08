@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
@@ -56,31 +58,37 @@ fun ColorDropDown(
         },
         modifier = modifier
     ) {
-        TextField(
-            readOnly = true,
-            value = context.getString(OPTION_COLOR[selectedColor].first),
-            onValueChange = { },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = expanded
-                )
-            },
-            textStyle = TextStyle.Default.copy(
-                fontWeight = FontWeight.W400,
-                fontSize = 18.sp,
-                letterSpacing = 0.5.sp,
-            ),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor =  Color.Transparent,
-                disabledIndicatorColor =Color.Transparent,
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .menuAnchor()
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Spacer(modifier = Modifier.size(16.dp))
+            Canvas(modifier = Modifier.size(20.dp)) {
+                drawCircle(OPTION_COLOR[selectedColor].second)
+            }
+            TextField(
+                readOnly = true,
+                value = context.getString(OPTION_COLOR[selectedColor].first),
+                onValueChange = { },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(
+                        expanded = expanded
+                    )
+                },
+                textStyle = TextStyle.Default.copy(
+                    fontWeight = FontWeight.W400,
+                    fontSize = 18.sp,
+                    letterSpacing = 0.5.sp,
+                ),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor()
+            )
+        }
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = {
