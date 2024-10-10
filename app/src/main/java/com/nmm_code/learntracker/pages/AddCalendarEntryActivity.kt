@@ -1,5 +1,6 @@
 package com.nmm_code.learntracker.pages
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Add
@@ -28,6 +30,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimeInput
@@ -36,6 +39,7 @@ import androidx.compose.material3.TimePickerState
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -69,6 +73,7 @@ import java.util.Calendar
 import java.util.Locale
 
 class AddCalendarEntryActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -88,6 +93,7 @@ class AddCalendarEntryActivity : ComponentActivity() {
         }
     }
 
+    @SuppressLint("CoroutineCreationDuringComposition")
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Page() {
@@ -121,7 +127,9 @@ class AddCalendarEntryActivity : ComponentActivity() {
         var color by remember {
             mutableIntStateOf(0)
         }
-
+        var allday by remember {
+            mutableStateOf(false)
+        }
         Scaffold(
             topBar = {
                 TopBar(title = stringResource(R.string.termin))
@@ -143,13 +151,23 @@ class AddCalendarEntryActivity : ComponentActivity() {
                 HorizontalDivider()
                 Spacer(modifier = Modifier.size(10.dp))
                 IconRow(icon = Icons.Default.AccessTime) {
-                    Paragraph1(
-                        text = stringResource(R.string.add_time),
-                        modifier = it.padding(16.dp)
-                    )
+                    Row(
+                        it.padding(start = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Paragraph1(
+                            text = stringResource(R.string.all_time),
+                            modifier = it.padding(16.dp)
+                        )
+                        Switch(
+                            checked = allday,
+                            onCheckedChange = { idx -> allday = idx },
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                    }
                 }
-                DateTimeRow(dateDialog, datePickerState, timeDialog, timePickerState)
-                DateTimeRow(dateDialog2, datePickerState2, timeDialog2, timePickerState2)
+                DateTimeRow(dateDialog, datePickerState, timeDialog, timePickerState, allday)
+                DateTimeRow(dateDialog2, datePickerState2, timeDialog2, timePickerState2, allday)
                 Spacer(modifier = Modifier.size(10.dp))
                 HorizontalDivider()
                 Spacer(modifier = Modifier.size(10.dp))
@@ -186,7 +204,8 @@ class AddCalendarEntryActivity : ComponentActivity() {
         dateDialog: MutableState<Boolean>,
         datePickerState: DatePickerState,
         timeDialog: MutableState<Boolean>,
-        timePickerState: TimePickerState
+        timePickerState: TimePickerState,
+        allDay: Boolean
     ) {
         IconRow { mod ->
             Row(
@@ -204,30 +223,31 @@ class AddCalendarEntryActivity : ComponentActivity() {
                         Paragraph1(text = dateFormat.format(selectedDate.time))
                     }
                 }
-                TextButton(onClick = { timeDialog.value = true }) {
-                    val dateFormat =
-                        DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault())
-                    val pattern = if (dateFormat.format(Calendar.getInstance().time)
-                            .contains("AM") || dateFormat.format(Calendar.getInstance().time)
-                            .contains("PM")
-                    ) {
-                        "hh a"
-                    } else {
-                        "HH:mm"
-                    }
-                    val formatter =
-                        DateTimeFormatter.ofPattern(pattern, Locale.getDefault())
+                if (!allDay)
+                    TextButton(onClick = { timeDialog.value = true }) {
+                        val dateFormat =
+                            DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault())
+                        val pattern = if (dateFormat.format(Calendar.getInstance().time)
+                                .contains("AM") || dateFormat.format(Calendar.getInstance().time)
+                                .contains("PM")
+                        ) {
+                            "hh a"
+                        } else {
+                            "HH:mm"
+                        }
+                        val formatter =
+                            DateTimeFormatter.ofPattern(pattern, Locale.getDefault())
 
-                    Paragraph1(
-                        textAlign = TextAlign.Center,
-                        text = formatter.format(
-                            LocalTime.of(
-                                timePickerState.hour,
-                                timePickerState.minute
+                        Paragraph1(
+                            textAlign = TextAlign.Center,
+                            text = formatter.format(
+                                LocalTime.of(
+                                    timePickerState.hour,
+                                    timePickerState.minute
+                                )
                             )
                         )
-                    )
-                }
+                    }
             }
         }
     }
@@ -241,6 +261,7 @@ class AddCalendarEntryActivity : ComponentActivity() {
     ) {
         if (dialog.value) {
             PickerDialog(
+                title = stringResource(R.string.select_time),
                 onDismissRequest = { dialog.value = false },
                 confirmButton = {
                     TextButton(
@@ -307,7 +328,7 @@ class AddCalendarEntryActivity : ComponentActivity() {
 
     @Composable
     fun PickerDialog(
-        title: String = stringResource(R.string.select_time),
+        title: String,
         onDismissRequest: () -> Unit,
         confirmButton: @Composable (() -> Unit),
         switchButton: @Composable (() -> Unit)? = null,
@@ -318,7 +339,7 @@ class AddCalendarEntryActivity : ComponentActivity() {
         Dialog(
             onDismissRequest = onDismissRequest,
             properties = DialogProperties(
-                usePlatformDefaultWidth = true
+                usePlatformDefaultWidth = false
             ),
         ) {
             Surface(
@@ -328,7 +349,8 @@ class AddCalendarEntryActivity : ComponentActivity() {
                     .background(
                         shape = MaterialTheme.shapes.extraLarge,
                         color = containerColor
-                    ),
+                    )
+                    .widthIn(200.dp, 350.dp),
                 color = containerColor
             ) {
                 Column(

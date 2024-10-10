@@ -39,9 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.nmm_code.learntracker.R
 import com.nmm_code.learntracker.composable.TopBar
-import com.nmm_code.learntracker.data.CalendarData
 import com.nmm_code.learntracker.data.DataStoreState
-import com.nmm_code.learntracker.data.NameData
 import com.nmm_code.learntracker.data.SubjectsData
 import com.nmm_code.learntracker.data.TimerActivityData
 import com.nmm_code.learntracker.data.TodoData
@@ -128,8 +126,6 @@ class MainActivity : ComponentActivity() {
         SubjectsData.clear()
         TimerActivityData.clear()
         WorkingTitleData.clear()
-        CalendarData.clear()
-        NameData.clear()
     }
 
     @Composable
