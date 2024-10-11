@@ -69,4 +69,23 @@
     <string name="every_year">Jedes Year</string>
     <string name="doesn_t_repeat">Nicht Widerholen</string>
     <string name="add_a_new">Termin hinzufügen</string>
+    <string name="sfdfssdf">1. Verantwortlicher</string>
+    <string name="p1ff">Der Schutz Ihrer persönlichen Daten ist mir, Nima Mohammadimohammadi, als Entwickler dieser App besonders wichtig. In dieser Datenschutzerklärung informiere ich Sie darüber, wie Ihre Daten in der App verarbeitet werden und welche Maßnahmen ergriffen werden, um Ihre Privatsphäre zu schützen. Bitte beachten Sie, dass sich die App derzeit in der Entwicklungsphase befindet und es zu technischen Problemen oder Bugs kommen kann.</string>
+    <string name="fdfgfgfdg">Es werden keine Daten, die in der App verarbeitet werden, an Dritte weitergegeben. Ihre Informationen werden ausschließlich lokal auf Ihrem Gerät gespeichert und bleiben privat.</string>
+    <string name="dfsgdfsgsdgd">8. Änderungen der Datenschutzerklärung</string>
+    <string name="sdfgsdgsd">Sollte es zukünftig Änderungen an dieser Datenschutzerklärung geben, werde ich Sie darüber in der App informieren. Diese Änderungen treten dann unmittelbar in Kraft, sodass Sie immer auf dem neuesten Stand sind, wie Ihre Daten verarbeitet werden.</string>
+    <string name="fsdfsdf">Verantwortlich für die Datenverarbeitung im Rahmen dieser App bin ich, Nima Mohammadimohammadi, als Einzelentwickler. Bei Fragen oder Anliegen bezüglich des Datenschutzes können Sie mich unter folgender E-Mail-Adresse kontaktieren.</string>
+    <string name="dsfsdf">2. Keine Speicherung personenbezogener Daten</string>
+    <string name="dfgdfg">In dieser App werden keine personenbezogenen Daten von Ihnen oder Dritten gespeichert oder verarbeitet. Alle Daten, die Sie in der App eingeben oder erzeugen, verbleiben ausschließlich auf Ihrem eigenen Gerät und werden dort verarbeitet. Es findet keine Übertragung Ihrer Daten an mich oder externe Systeme statt.</string>
+    <string name="gfdgfdgdfg">3. Lokale Datenspeicherung</string>
+    <string name="ggf">Alle Informationen, die in der App gespeichert werden – wie z. B. Lernfortschritte, Einstellungen oder andere personenbezogene Daten – bleiben vollständig auf Ihrem Gerät. Es werden keine Daten an andere Geräte oder Dienste gesendet. Sie haben die volle Kontrolle über Ihre Daten und können diese jederzeit selbst verwalten oder löschen.</string>
+    <string name="fgdhghdf">4. Keine Weitergabe von Daten an Dritte</string>
+    <string name="dfgdfgg">5. Entwicklungsphase und mögliche Fehler</string>
+    <string name="fdgdgfg">Diese App befindet sich derzeit in der Entwicklungsphase. Es ist möglich, dass Bugs oder technische Probleme auftreten, die die Funktionalität der App beeinträchtigen könnten. Ich arbeite kontinuierlich daran, diese Probleme zu beheben und die App zu verbessern. Bitte haben Sie Verständnis, dass in dieser Phase möglicherweise nicht alle Funktionen reibungslos funktionieren.</string>
+    <string name="fbdfgdfgdf">6. Sicherheitsmaßnahmen</string>
+    <string name="bgbfg">Obwohl die App keine externen Datenübertragungen durchführt, sind Ihre lokal gespeicherten Daten durch Sicherheitsmechanismen auf Ihrem Gerät geschützt. Dennoch ist es wichtig, dass Sie als Benutzer Ihr Gerät ebenfalls durch Passwörter, Sicherheitsupdates und Antiviren-Software schützen, um unbefugten Zugriff auf Ihre Daten zu verhindern.</string>
+    <string name="sdfsdfsd">7. Ihre Rechte</string>
+    <string name="fdssfsd">Da keine personenbezogenen Daten an mich übermittelt oder gespeichert werden, entfallen hier gängige Datenschutzrechte wie das Recht auf Auskunft, Berichtigung oder Löschung von Daten. Alle Informationen bleiben auf Ihrem Gerät und unterliegen Ihrer eigenen Kontrolle.</string>
+    <string name="gfddgf">9. Kontakt</string>
+    <string name="fsddfgdfg">Falls Sie Fragen oder Anmerkungen zu dieser Datenschutzerklärung oder zur Nutzung der App haben, können Sie mich unter folgender E-Mail-Adresse erreichen.</string>
 </resources>

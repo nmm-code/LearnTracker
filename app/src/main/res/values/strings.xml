@@ -69,4 +69,24 @@
     <string name="doesn_t_repeat">Doesn\'t Repeat</string>
     <string name="add_a_new">Add a new Appointment</string>
     <string name="all_time">All-Day</string>
+    <string name="sfdfssdf">1. Responsible person</string>
+    <string name="fsdfsdf">I, Nima Mohammadimohammadi, as the individual developer, am responsible for data processing within the context of this app. If you have any questions or concerns regarding data protection, you can contact me at the following email address.</string>
+    <string name="dsfsdf">2. No storage of personal data</string>
+    <string name="dfgdfg">No personal data from you or third parties is stored or processed in this app. All data that you enter or generate in the app remains exclusively on your own device and is processed there. There will be no transfer of your data to me or external systems.</string>
+    <string name="gfdgfdgdfg">3. Local data storage</string>
+    <string name="ggf">All information stored in the app – such as: B. learning progress, settings or other personal data – remain entirely on your device. No data is sent to other devices or services. You have full control over your data and can manage or delete it yourself at any time.</string>
+    <string name="fgdhghdf">4. No passing on of data to third parties</string>
+    <string name="dfgdfgg">5. Development phase and possible errors</string>
+    <string name="fdgdgfg">This app is currently in development phase. It is possible that bugs or technical issues may occur that could affect the functionality of the app. I\'m continually working to fix these issues and improve the app. Please understand that not all functions may work smoothly during this phase.</string>
+    <string name="fbdfgdfgdf">6. Security measures</string>
+    <string name="bgbfg">Although the app does not carry out any external data transfers, your locally stored data is protected by security mechanisms on your device. However, it is important that you as a user also protect your device with passwords, security updates and antivirus software to prevent unauthorized access to your data.</string>
+    <string name="sdfsdfsd">7. Your rights</string>
+    <string name="fdssfsd">Since no personal data is transmitted to me or stored, common data protection rights such as the right to information, correction or deletion of data do not apply. All information remains on your device and is under your own control.</string>
+    <string name="fsddfgdfg">If you have any questions or comments about this privacy policy or the use of the app, you can contact me at the following email address.</string>
+    <string name="sdfgsdgsd">If there are any changes to this privacy policy in the future, I will inform you about them in the app. These changes will then take effect immediately, so you are always up to date on how your data is being processed.</string>
+    <string name="dfsgdfsgsdgd">8. Changes to the privacy policy</string>
+    <string name="fdfgfgfdg">No data processed in the app will be passed on to third parties. Your information is only stored locally on your device and remains private.</string>
+    <string name="p1ff">The protection of your personal data is particularly important to me, Nima Mohammadimohammadi, as the developer of this app. In this privacy policy I will inform you about how your data is processed in the app and what measures are taken to protect your privacy. Please note that the app is currently in the development phase and there may be technical problems or bugs.</string>
+    <string name="gfddgf">9. Contact</string>
+
 </resources>

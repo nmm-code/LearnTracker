@@ -214,9 +214,10 @@ class MainActivity : ComponentActivity() {
     fun BoxElement(elem: NavigationElements, snackBar: SnackbarHostState) {
         val color = getAccessibleTextColor(elem.color)
 
-        val modifier = Modifier
+        val modifier = Modifier.
+            width(BOX_WIDTH.dp)
             .aspectRatio(2f)
-            .width(BOX_WIDTH.dp)
+
 
         val title = getTextOfElem(elem)
         if (title != null)

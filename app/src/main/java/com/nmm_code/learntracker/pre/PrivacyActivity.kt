@@ -5,29 +5,23 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nmm_code.learntracker.R
 import com.nmm_code.learntracker.composable.TopBar
-import com.nmm_code.learntracker.data.DataStoreState
 import com.nmm_code.learntracker.ui.theme.LearnTrackerTheme
 import com.nmm_code.learntracker.ui.theme.space
-import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph2
+import com.nmm_code.learntracker.ui.theme.styleguide.text.Headline2
+import com.nmm_code.learntracker.ui.theme.styleguide.text.Paragraph1
 import com.nmm_code.learntracker.ui.theme.styleguide.touch.ButtonOutline
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 
 class PrivacyActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,63 +38,173 @@ class PrivacyActivity : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun PrivacyPage(modifier: Modifier = Modifier) {
-        val items = remember {
-            listOf(
-                "Lorem ipsum dolor sit amet. eiusmod tempor incididunt ut labore et dolore magn",
-                "Consectetur adipiscing elit. eiusmod tempor incididunt ut labore et dolore magn",
-                "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-                "Excepteur sint occaecat cupidatat non proident.",
-                "Sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                "Lorem ipsum dolor sit amet. eiusmod tempor incididunt ut labore et dolore magn",
-                "Consectetur adipiscing elit. eiusmod tempor incididunt ut labore et dolore magn",
-                "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-                "Excepteur sint occaecat cupidatat non proident.",
-                "Sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                "Lorem ipsum dolor sit amet. eiusmod tempor incididunt ut labore et dolore magn",
-                "Consectetur adipiscing elit. eiusmod tempor incididunt ut labore et dolore magn",
-                "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-                "Excepteur sint occaecat cupidatat non proident.",
-                "Sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                "Consectetur adipiscing elit. eiusmod tempor incididunt ut labore et dolore magn",
-                "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-                "Excepteur sint occaecat cupidatat non proident.",
-                "Sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                "Lorem ipsum dolor sit amet. eiusmod tempor incididunt ut labore et dolore magn",
-                "Consectetur adipiscing elit. eiusmod tempor incididunt ut labore et dolore magn",
-                "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-                "Excepteur sint occaecat cupidatat non proident.",
-                "Sunt in culpa qui officia deserunt mollit anim id est laborum."
-            )
-        }
         Scaffold(
             topBar = {
                 TopBar(title = stringResource(R.string.privacy), icon = false)
             },
             content = { paddingValues ->
                 LazyColumn(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(paddingValues)
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .padding(horizontal = 40.dp)
                 ) {
-                    items(items) {
-                        Paragraph2(
-                            text = it,
+
+                    item(key = 1) {
+                        Paragraph1(
                             softWrap = true,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 32.dp, vertical = 2.dp)
+                            text = stringResource(R.string.p1ff)
                         )
                     }
-                    item {
+                    item(key = 2) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+
+                    item(key = 3) {
+                        Headline2(wrap = true, text = stringResource(R.string.sfdfssdf))
+                    }
+                    item(key = 4) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+                    item(key = 5) {
+                        Paragraph1(
+                            softWrap = true,
+                            text = stringResource(R.string.fsdfsdf)
+                        )
+                    }
+                    item(key = 6) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+
+                    item(key = 7) {
+                        Headline2(
+                            wrap = true,
+                            text = stringResource(R.string.dsfsdf)
+                        )
+                    }
+                    item(key = 8) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+                    item(key = 9) {
+                        Paragraph1(
+                            softWrap = true,
+                            text = stringResource(R.string.dfgdfg)
+                        )
+                    }
+                    item(key = 10) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+
+                    item(key = 11) {
+                        Headline2(wrap = true, text = stringResource(R.string.gfdgfdgdfg))
+                    }
+                    item(key = 12) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+                    item(key = 13) {
+                        Paragraph1(
+                            softWrap = true,
+                            text = stringResource(R.string.ggf)
+                        )
+                    }
+                    item(key = 14) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+
+                    item(key = 15) {
+                        Headline2(wrap = true, text = stringResource(R.string.fgdhghdf))
+                    }
+                    item(key = 16) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+                    item(key = 17) {
+                        Paragraph1(
+                            softWrap = true,
+                            text = stringResource(R.string.fdfgfgfdg)
+                        )
+                    }
+                    item(key = 18) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+
+                    item(key = 19) {
+                        Headline2(wrap = true, text = stringResource(R.string.dfgdfgg))
+                    }
+                    item(key = 20) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+                    item(key = 21) {
+                        Paragraph1(
+                            softWrap = true,
+                            text = stringResource(R.string.fdgdgfg)
+                        )
+                    }
+                    item(key = 22) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+
+                    item(key = 23) {
+                        Headline2(wrap = true, text = stringResource(R.string.fbdfgdfgdf))
+                    }
+                    item(key = 24) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+                    item(key = 25) {
+                        Paragraph1(
+                            softWrap = true,
+                            text = stringResource(R.string.bgbfg)
+                        )
+                    }
+                    item(key = 26) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+                    item(key = 27) {
+                        Headline2(wrap = true, text = stringResource(R.string.sdfsdfsd))
+                    }
+                    item(key = 28) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+                    item(key = 29) {
+                        Paragraph1(
+                            softWrap = true,
+                            text = stringResource(R.string.fdssfsd)
+                        )
+                    }
+                    item(key = 30) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+
+                    item(key = 31) {
+                        Headline2(wrap = true, text = stringResource(R.string.dfsgdfsgsdgd))
+                    }
+                    item(key = 32) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+                    item(key = 33) {
+                        Paragraph1(
+                            softWrap = true,
+                            text = stringResource(R.string.sdfgsdgsd)
+                        )
+                    }
+                    item(key = 34) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+                    item(key = 35) {
+                        Headline2(wrap = true, text = stringResource(R.string.gfddgf))
+                    }
+                    item(key = 36) {
+                        Spacer(modifier = Modifier.padding(10.dp))
+                    }
+                    item(key = 37) {
+                        Paragraph1(
+                            softWrap = true,
+                            text = stringResource(R.string.fsddfgdfg)
+                        )
+                    }
+                    item(key = 38) {
+                        Spacer(modifier = Modifier.padding(30.dp))
+                    }
+
+                    item(key = 39) {
                         ButtonOutline(
                             onClick = {
                                 this@PrivacyActivity.startActivity(
