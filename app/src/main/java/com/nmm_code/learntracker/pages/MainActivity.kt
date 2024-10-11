@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
@@ -140,18 +141,18 @@ class MainActivity : ComponentActivity() {
                 Color(83, 109, 198, 255),
                 TrackTimeActivity::class.java
             ),
-            NavigationElements(
-                R.string.schedule,
-                R.drawable.ic_schedule,
-                Color(78, 185, 75, 255),
-                ScheduleActivity::class.java
-            ),
-            NavigationElements(
-                R.string.calendar,
-                R.drawable.ic_calendar,
-                Color(194, 97, 184, 255),
-                CalendarActivity::class.java
-            ),
+//            NavigationElements(
+//                R.string.schedule,
+//                R.drawable.ic_schedule,
+//                Color(78, 185, 75, 255),
+//                ScheduleActivity::class.java
+//            ),
+//            NavigationElements(
+//                R.string.calendar,
+//                R.drawable.ic_calendar,
+//                Color(194, 97, 184, 255),
+//                CalendarActivity::class.java
+//            ),
             NavigationElements(
                 R.string.subjects,
                 R.drawable.ic_subjects,
@@ -201,7 +202,7 @@ class MainActivity : ComponentActivity() {
                 )
             }
             navigationElements.forEach { item ->
-                item(span = StaggeredGridItemSpan.SingleLane) {
+                item(span =  StaggeredGridItemSpan.FullLine) {
                     BoxElement(item, snackBar)
                 }
             }
@@ -214,8 +215,8 @@ class MainActivity : ComponentActivity() {
         val color = getAccessibleTextColor(elem.color)
 
         val modifier = Modifier
-            .aspectRatio(1f)
-            .size(BOX_WIDTH.dp)
+            .aspectRatio(2f)
+            .width(BOX_WIDTH.dp)
 
         val title = getTextOfElem(elem)
         if (title != null)
