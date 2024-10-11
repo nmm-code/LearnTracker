@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material.icons.filled.Repeat
+import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -189,6 +190,21 @@ class AddCalendarEntryActivity : ComponentActivity() {
                 }
                 Spacer(modifier = Modifier.size(10.dp))
                 HorizontalDivider()
+                Button(onClick = {
+
+//                    val selectedDate = Calendar.getInstance().apply {
+//                        timeInMillis = datePickerState.selectedDateMillis!!
+//                    }
+//                    val selectedDate2 = Calendar.getInstance().apply {
+//                        timeInMillis = datePickerState2.selectedDateMillis!!
+//                    }
+//                    Thread {
+//                        calendarDao.insertTime(Time(0,0))
+//                    }.start()
+
+                }) {
+                    Text(text = "ADD")
+                }
             }
         }
         DateDialog(dateDialog, datePickerState)
