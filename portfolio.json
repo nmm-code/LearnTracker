@@ -1,4 +1,4 @@
 {
-	"description": "",
+	"description": "In dem Spiel FloodPipe wird dem Spieler ein Spielfeld präsentiert mit lauter Rohren, die man richtig aufstellen muss. Der Spieler kann durch das mehrfache Anklicken eines Rohrs es drehen, um mit dem Nachbar Rohren die Verbindung herstellen. Dabei ist es wichtig, dass am Ende alle Rohre mit Wasser gefüllt wurden und dabei kein offenes Ende entsteht",
 	"thumbnail": true
 }
